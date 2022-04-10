@@ -1,0 +1,14 @@
+extends layout
+
+block content
+    h1.text-center Register
+    form(method='POST', action='/users/register')
+        div.form-container
+            div.form-field
+                input.transparent-input.form-control.form-control-md.mt-2.w-50(name='username', type='text', placeholder='Username')
+            div.form-field
+                input.transparent-input.form-control.form-control-md.mt-2.w-50(name='email', type='text', placeholder='Email')
+            div.form-field
+                input.transparent-input.form-control.form-control-md.mt-2.w-50(name='password', type='password', placeholder='Password')
+            div.text-center
+                input.btn.btn-primary.mt-2(type='submit', value='Submit')

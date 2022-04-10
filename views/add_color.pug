@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h1.text-center #{title}
+    form(method='POST', action='/colors/add')
+        div.form-container
+            div.form-field
+                input.transparent-input.form-control.form-control-md.mt-2.w-50(name='name', type='text', placeholder='Name')
+            div.form-field
+                input.transparent-input.form-control.form-control-md.mt-2.w-50(name='hex', type='text', placeholder ='HEX value (without #)')
+            div.text-center
+                input.btn.btn-primary.mt-2(type='submit', value='Submit')
