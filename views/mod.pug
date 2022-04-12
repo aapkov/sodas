@@ -5,9 +5,11 @@ block content
         p Mod applications
     div.filter-section.d-flex.justify-content-center.mt-3.mb-3
         div.p2
-            a.btn.btn-sm.btn-outline-warning(href='/mod/view/u') Unresolved
+            a.btn.btn-sm.btn-outline-warning(href='/mod/view/u', data-toggle="button") Unresolved
         div.p2.ms-3
-            a.btn.btn-sm.btn-outline-warning(href='/mod/view/r') Resolved
+            a.btn.btn-sm.btn-outline-danger(href='/mod/view/d', data-toggle="button") Denied
+        div.p2.ms-3
+            a.btn.btn-sm.btn-outline-success(href='/mod/view/a', data-toggle="button") Accepted
     .container#dataDisplay
             if empty
                 div.empty-message Nothing to display

@@ -13,13 +13,12 @@ router.get('/apply', (req, res) => {
 });
 
 // mod applications default view
-router.get('/view/:isClosed', helpers.checkAuthentication, (req, res) => {
-    ModApplication.find({isClosed: req.params.isClosed || 'u'}, (err, modApplications) => {
+router.get('/view/:resolution', helpers.checkAuthentication, (req, res) => {
+    ModApplication.find({resolution: req.params.resolution}, (err, modApplications) => {
         if(err) { console.log(err) }
         if (Object.keys(modApplications).length < 1) {
             res.render('mod', {
-                empty: true,
-                errors: [{'msg': 'No mod applications'}]
+                empty: true
             })
         }
         else {
@@ -62,17 +61,41 @@ router.post('/apply',
     }
 );
 
+// update mod application
+router.put('/update/:id',
+    async (req, res) => {
+        if (!req.user._id) {
+            res.status(500).send();
+        } else {
+            let errors = validationResult(req);
+            if (Object.keys(errors.errors).length > 0) {
+                res.render('mod/applicaion/:id', {
+                    errors: errors.errors
+                });}
+                else {
+                    ModApplication.findOneAndUpdate(
+                        { _id: req.params.id },
+                        { $set: { "resolution" : req.body.resolution }},
+                        (err) => {
+                    if (err) {console.log(err)}
+                })
+            }
+        }
+    }   
+);
+
 // get single application
 router.get(`/application/:id`, helpers.checkAuthentication, async (req, res) => {
     let modApplication = await ModApplication.findById(req.params.id).exec();
     if (Object.keys(modApplication).length > 0) {
        res.render('single_mod_application', {
+            _id: req.params.id,
             discordTag: modApplication.discordTag,
             textContent: modApplication.textContent,
             howLong: modApplication.howLong,
             experience: modApplication.experience,
             improvement: modApplication.improvement,
-            isClosed: modApplication.isClosed,
+            resolution: modApplication.resolution,
             isAccepted: modApplication.isAccepted
         }); 
     } else {
@@ -80,5 +103,4 @@ router.get(`/application/:id`, helpers.checkAuthentication, async (req, res) => 
         res.redirect('/');
     }  
 })
-
 module.exports = router;

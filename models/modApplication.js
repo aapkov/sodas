@@ -22,15 +22,10 @@ let modApplicationSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    isClosed:{
+    resolution:{
         type: String,
         required: true,
         default: 'u'
-    },
-    isAccepted:{
-        type: Boolean,
-        required: true,
-        default: false
     }
 })
 
