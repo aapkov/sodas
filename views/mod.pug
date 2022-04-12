@@ -1,0 +1,19 @@
+extends layout
+
+block content
+    d.header
+        p Mod applications
+    div.filter-section.d-flex.justify-content-center.mt-3.mb-3
+        div.p2
+            a.btn.btn-sm.btn-outline-warning(href='/mod/view/u') Unresolved
+        div.p2.ms-3
+            a.btn.btn-sm.btn-outline-warning(href='/mod/view/r') Resolved
+    .container#dataDisplay
+            if empty
+                div.empty-message Nothing to display
+            else
+                each modApplication, i in modApplications
+                    div.color-row(class="resolved-"+modApplication.isClosed)
+                        div.d-flex.align-items-center.ms-3.text-question #{modApplication.discordTag}
+                        div.p-2.edit-buttons
+                            a.btn.btn-sm.btn-outline-warning(href='/mod/application/' + modApplication._id, data-id=modApplication._id) Open

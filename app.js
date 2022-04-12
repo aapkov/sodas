@@ -85,8 +85,10 @@ app.get('/icon', (req, res) => {
 // Bring in routes
 let colorRoutes = require('./routes/colors');
 let userRoutes = require('./routes/users');
+let modRoutes = require('./routes/mod');
 app.use('/users', userRoutes);
 app.use('/colors', colorRoutes);
+app.use('/mod', modRoutes);
 
 // Server Start
 app.listen(port, () =>{

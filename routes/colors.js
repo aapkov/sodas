@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const mongoose = require('mongoose');
+const helpers = require('../public/js/helpers.js');
 
 // discord bot stuff
 const { Client, Intents } = require('discord.js');
@@ -13,7 +14,7 @@ let Color = require('../models/color');
 let User = require('../models/user');
 
 // Post Routing
-router.get(`/add`, checkAuthentication, (req, res) => {
+router.get(`/add`, helpers.checkAuthentication, (req, res) => {
     res.render('add_color', {
         title: 'Add color'
     });
@@ -27,15 +28,15 @@ router.post('/add',
     body('hex', 'Must be a valid hex value').isHexColor().isAlphanumeric(),
     async (req, res) => {
     if (!req.user._id) {
-        res.status(500).send();
-    } else {
+        res.status(500).send(); } 
+        else {
         let errors = validationResult(req);
         if (Object.keys(errors.errors).length > 0) {
             res.render('add_color', {
                 title: 'Add color',
+                user: req.user,
                 errors: errors.errors
-            });} 
-        else  {
+            });} else  {
             // integration with discord bot
             let channel = client.channels.cache.get(process.env.TEST_CHANNEL_ID);
 
@@ -65,18 +66,6 @@ router.post('/add',
         }
     }
 });
-// get single color
-router.get(`/:id`, checkAuthentication, (req, res) => {
-    Color.findById(req.id, (err, color) => {
-        User.findById(color.author, (error, user) => {
-            res.render('color', {
-                        color: color,
-                        id: color.id,
-                        author: user.username
-                });
-        });
-    });
-})
 
 // deleting colors
 router.delete('/:id', async (req, res) => {
@@ -88,15 +77,7 @@ router.delete('/:id', async (req, res) => {
         res.status(200).send(); 
     }
 })
-// access controll
-function checkAuthentication (req, res, next) {
-    if (req.isAuthenticated()) {
-        next();
-    } else {
-        req.flash('danger', 'Please log in to access this page');
-        res.redirect('/users/login');
-    }
-}
+
 // discord functions
 async function doesColorExist(roleName) {
     let result = await Color.find({

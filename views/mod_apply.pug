@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    h1.text-center Apply for mod
+    form(method='POST', action='/mod/apply')
+        div.form-container
+            div.form-field
+                textarea.textContainer.transparent-input.form-control.form-control-md.mt-2.w-50(name='discordTag', type='text', placeholder='Discord Tag')
+            div.form-field
+                textarea.textContainer.transparent-input.form-control.form-control-md.mt-2.w-50(name='textContent', type='text', placeholder='Tell us why you want to be mod and what you’d bring to the community')
+            div.form-field
+                textarea.textContainer.transparent-input.form-control.form-control-md.mt-2.w-50(name='howLong', type='text', placeholder='How long have you been in the discord?')
+            div.form-field
+                textarea.textContainer.transparent-input.form-control.form-control-md.mt-2.w-50(name='experience', type='text', placeholder='Do you have any experience modding in general ( twitch chat, discord servers, etc) If so feel free to provide proof')
+            div.form-field
+                textarea.textContainer.transparent-input.form-control.form-control-md.mt-2.w-50(name='improvement', type='text', placeholder='Tell us something you’d do to better the discord server/help out or even entertain the community')
+            div.text-center
+                input.btn.btn-primary.mt-2(type='submit', value='Submit')

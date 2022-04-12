@@ -1,5 +1,6 @@
 extends layout
 
 block content
-    h1= author
-    h1= id
+    d.color-row
+        d.second-record(style={background: '#' + color.hex}) 
+        d.first-record #{color.name}

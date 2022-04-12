@@ -3,12 +3,13 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const passport = require ('passport');
+const helpers = require('../public/js/helpers.js');
 
 // bring in user model
 let User = require('../models/user');
 
 // register
-router.get('/register', (req, res) => {
+router.get('/register', helpers.checkAuthentication, (req, res) => {
     res.render('register');
 });
 
@@ -17,19 +18,17 @@ router.post('/register',
     body('email', 'Email is required').notEmpty(),
     body('email', 'Email is not valid').isEmail(),
     body('password', 'Password is required, 5 - 18 characters').notEmpty().isLength({min:5, max: 18}),
-    // body('confirmpassword', 'Passwords do not match').equals(body.password),
 
     (req, res) => {
         const username = req.body.username;
         const email = req.body.email;
         const password = req.body.password;
-        const confirmpassword = req.body.confirmpassword;
 
         let errors = validationResult(req);
         if (Object.keys(errors.errors).length > 0) {
-            console.log('errors, im here');
             res.render('register', {
-                errors:errors.errors
+                errors:errors.errors,
+                user: req.user
             });
         } else {
             let newUser = new User ({
@@ -74,7 +73,7 @@ router.post('/login', (req, res, next) => {
 // Logout
 router.get('/logout', (req, res) => {
     req.logout();
-    req.flash('success', 'Youa re logged out');
+    req.flash('success', 'Logged out');
     res.redirect('/users/login');
 })
 

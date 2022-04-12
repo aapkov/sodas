@@ -13,8 +13,13 @@ html
                     if user
                         li.nav-item.mt-2
                             a.nav-link(href='/colors/add') Add Colors
+                    else
+                        li.nav-item.mt-2
+                            a.nav-link(href='/mod/apply') Apply for Mod
                 ul.nav.navbar-nav.nav-right
                     if user
+                        li.nav-item
+                            a.nav-link(href='/mod/view/u') Mod Applications
                         li.nav-item
                             a.nav-link(href='/users/register') Register  
                         li.nav-item
@@ -30,7 +35,7 @@ html
             block content
             br
             hr
-            footer#footer
+            footer#footer.navbar.fixed-bottom
                 p Made with <span> &#10084; </span> by apeK
         script(src='/bower_components/jquery/dist/jquery.js')  
         script(src='/bower_components/bootstrap/dist/js/bootstrap.js')

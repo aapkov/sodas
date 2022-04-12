@@ -7,10 +7,9 @@ block content
             each color, i in colors
                 d.color-row
                     d.second-record(style={background: '#' + color.hex}) 
-                    d.first-record #{color.name}
+                    div.first-record #{color.name}
+                    div.third-record.edit-buttons(style={color: '#' + color.hex}) hex: ##{color.hex}
                     if user
                         d.edit-buttons
-                            d.p-2
-                                a.btn.btn-sm.btn-outline-warning(href='/colors/' +color._id, data-id=color._id) Info
                             d.p-2
                                 a.btn.btn-sm.btn-outline-danger.delete-color(href='#', data-id=color._id) Delete
