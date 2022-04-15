@@ -10,12 +10,12 @@ block content
             a.btn.btn-sm.btn-outline-danger(href='/mod/view/d', data-toggle="button") Denied
         div.p2.ms-3
             a.btn.btn-sm.btn-outline-success(href='/mod/view/a', data-toggle="button") Accepted
-    .container#dataDisplay
+    .container#dataDisplay(class="border-"+resolution)
             if empty
-                div.empty-message Nothing to display
+                div.empty-message.p-2 Nothing to display
             else
                 each modApplication, i in modApplications
-                    div.color-row(class="resolved-"+modApplication.isClosed)
+                    div.color-row
                         div.d-flex.align-items-center.ms-3.text-question #{modApplication.discordTag}
                         div.p-2.edit-buttons
                             a.btn.btn-sm.btn-outline-warning(href='/mod/application/' + modApplication._id, data-id=modApplication._id) Open

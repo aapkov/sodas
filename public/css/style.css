@@ -56,10 +56,21 @@ h1 {
 .text {
     font-size: small;
     color: white;
+    line-height: 0.8rem;
+    margin-bottom: 0.3rem;
 }
-
+.text-bigger {
+    font-size: medium;
+    color: white;
+    line-height: 0.8rem;
+    margin-bottom: 0.3rem;
+}
+.text-e {
+    opacity: 60%;
+    font-style: italic;
+}
 .border-box {
-    margin-top: 15px;
+    border-radius: 10px;
     margin-left: auto;
     margin-right: auto;
     background-color: #2c2f33;
@@ -67,6 +78,7 @@ h1 {
     opacity: .5;
     border:1px dashed rgb(255,0,255);
 }
+
 .text-question {
     font-size: medium;
     margin: auto;
@@ -102,6 +114,19 @@ h1 {
     background-color: #2c2f33;
     padding-left: 5px;
     font-size: smaller;
+}
+
+.border-u {
+    border: 1px solid rgb(255, 193, 7) !important;
+    border-radius: 6px;
+}
+.border-d {
+    border: 1px solid rgb(220, 53, 69) !important;
+    border-radius: 6px;
+}
+.border-a {
+    border: 1px solid rgb(25, 135, 84) !important;
+    border-radius: 6px;
 }
 
 .color-row {

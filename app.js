@@ -55,10 +55,8 @@ app.set('view engine', 'pug');
 
 // Passport
 require('./config/passport')(passport);
-
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.get('*', (req, res, next) => {
     res.locals.user = req.user || null;
     next();
@@ -86,6 +84,8 @@ app.get('/icon', (req, res) => {
 let colorRoutes = require('./routes/colors');
 let userRoutes = require('./routes/users');
 let modRoutes = require('./routes/mod');
+let unbanRoutes = require('./routes/unban');
+app.use('/unban', unbanRoutes);
 app.use('/users', userRoutes);
 app.use('/colors', colorRoutes);
 app.use('/mod', modRoutes);

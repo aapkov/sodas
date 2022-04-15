@@ -74,6 +74,7 @@ router.delete('/:id', async (req, res) => {
     } else {
         let channel = client.channels.cache.get(process.env.TEST_CHANNEL_ID);
         await deleteColor(channel, req.params.id);
+        req.flash('success', 'Color Deleted')
         res.status(200).send(); 
     }
 })

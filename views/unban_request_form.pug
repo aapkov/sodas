@@ -1,0 +1,22 @@
+extends layout
+
+block content
+    h1.text-center Unban Request
+        div.border-box.form-container
+            div.form-check.form-check-inline
+                input.form-check-input(type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1")
+                label.form-check-label Discord ban
+            div.form-check.form-check-inline
+                input.form-check-input(type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2")
+                label.form-check-label Twitch ban
+            div.form-field
+                input.transparent-input.form-control.form-control-md.mt-2.w-50(name='name', type='text', placeholder='Name')
+            div.form-field
+                input.transparent-input.form-control.form-control-md.mt-2.w-50(name='name', type='text', placeholder='Name')
+            div.form-field
+                input.transparent-input.form-control.form-control-md.mt-2.w-50(name='name', type='text', placeholder='Name')
+            div.form-field
+                input.transparent-input.form-control.form-control-md.mt-2.w-50(name='name', type='text', placeholder='Name')
+        div
+            if resolution == 'u'
+                a.btn.btn-sm.btn-outline-success(type='submit', value='Submit') Submit

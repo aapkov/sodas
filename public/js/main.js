@@ -6,8 +6,7 @@ $(document).ready( () => {
             type:'DELETE',
             url: '/colors/'+id,
             success: function(response) {
-                alert("Deleted color with id "+id);
-                window.location.href= '#'
+                window.location.href= '/'
             },
             error: function(err) {
                 console.log(err);
@@ -26,11 +25,27 @@ $(document).ready( () => {
           contentType: "application/json",
           data: JSON.stringify(data),
           success: function(response) {
-            window.location.href= '/mod/view/u';
+            window.location.href= `/mod/view/${resolution}`;
           }, error: function(err) {
             console.log(err); }
       })
     });
+    $('.mod-action').hover( (e) => {
+      $targetButton = $(e.target);
+      $targetBorder = $('#border');
+      let borderDefaultClass = 'border-' + $targetBorder.attr('value');
+      let buttonClass = 'border-' + $targetButton.attr('value');
+      $targetBorder.removeClass(borderDefaultClass);
+      $targetBorder.addClass(buttonClass);
+    }, (e) => {
+      $targetButton = $(e.target);
+      $targetBorder = $('#border');
+      let borderDefaultClass = 'border-' + $targetBorder.attr('value');
+      let buttonClass = 'border-' + $targetButton.attr('value');
+      $targetBorder.removeClass(buttonClass);
+      $targetBorder.addClass(borderDefaultClass);
+    });
+      
     $('.alert').delay(3000).fadeOut()
     $(function() {
         $('.textContainer').on('input keyup paste', function() {
@@ -56,6 +71,5 @@ $(document).ready( () => {
       } else if (pathName.includes('/mod/view/a')) {
         $( "a[href='/mod/view/a']" ).addClass('active');
       }
-    });
-    
+    });   
 })

@@ -2,21 +2,26 @@ extends layout
 
 block content
     h1.text-center Mod application by<br />#{discordTag}
-        div.border-box
-            p.text-question Tell us why you want to be mod and what you’d bring to the community
-            p.text #{textContent}
-        div.border-box
-            p.text-question How long have you been in the discord?
-            p.text #{howLong}
-        div.border-box
-            p.text-question Do you have any experience modding in general ( twitch chat, discord servers, etc) If so feel free to provide proof
-            p.text #{experience}
-        div.border-box
-            p.text-question Tell us something you’d do to better the discord server/help out or even entertain the community
-            p.text #{improvement}
+        div#border(class="border-"+resolution value=resolution).pb-3.mt-3
+            div.mt-3.mb-0
+                p.text-question Tell us why you want to be mod and what you’d bring to the community
+                div.border-box.mt-1
+                    p.text #{textContent}
+            div.mt-3.mb-0
+                p.text-question How long have you been in the discord?
+                div.border-box.mt-1
+                    p.text #{howLong}
+            div.mt-3.mb-0
+                p.text-question Do you have any experience modding in general ( twitch chat, discord servers, etc) If so feel free to provide proof
+                div.border-box.mt-1
+                    p.text #{experience}
+            div.mt-3.mb-0
+                p.text-question Tell us something you’d do to better the discord server/help out or even entertain the community
+                div.border-box.mt-1
+                    p.text #{improvement}
         div
             if resolution == 'u'
-                a.btn.btn-sm.btn-outline-success.mod-action(href='/mod/view/u' data-id=_id value='a') Accept
-                a.btn.btn-sm.btn-outline-danger.mod-action(href='/mod/view/u' data-id=_id value='d') Deny
+                a.btn.btn-sm.btn-outline-success.mod-action(data-id=_id value='a') Accept
+                a.btn.btn-sm.btn-outline-danger.mod-action.ms-2(data-id=_id value='d') Deny
             if resolution == 'd'
-                a.btn.btn-sm.btn-outline-danger.mod-action(href='/mod/view/u' data-id=_id value='u') un-Deny
+                a.btn.btn-sm.btn-outline-danger.mod-action(data-id=_id value='u') un-Deny

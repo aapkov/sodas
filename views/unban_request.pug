@@ -1,0 +1,57 @@
+extends layout
+
+block content
+    d.d-flex.flex-column.justify-content-center.align-items-center
+    h1.text-center Unban Request for Sodapoppin
+        div.mt-3
+            p.text.border-box.pb-1.pt-1.opacity-100
+                |As of 11/4/2020 ban appeals may or may not be checked consistently
+            p.text.border-box.pb-1.pt-1.opacity-100
+                |You can submit an appeal for the permanent suspension you have received in the Twitch channel "Sodapoppin"
+            p.text.border-box.pb-1.pt-1.opacity-100
+                |A minimum 250 word essay is expected. "Unban me mods" Is not a valid reason.
+        div.border-box.pb-1.pt-1.opacity-100
+            p.text-bigger.mb-3
+                |If you are unsure as to why you were banned:
+            div.border-box.pb-1.pt-1.opacity-100.mt-1
+                p.text
+                    |A. You were probably banned before 2017
+                p.text.text-e
+                    |(No logs before then since Twitch Legal shutdown Overrustlelogs as of May 1st 2020)
+            div.border-box.pb-1.pt-1.opacity-100.mt-1
+                p.text
+                    |B. Your account has been unknowingly compromised and was put on a bot banlist.
+                p.text.text-e
+                    |(This is becoming more common due to recent surge of bot activity over the past 2 years)
+            div.border-box.pb-1.pt-1.opacity-100.mt-1
+                p.text
+                    |C. You were probably mistakenly banned and that person may not be mod anymore.
+                p.text.text-e
+                    |(Mod accounts have been hacked in the past)
+            div.border-box.pb-1.pt-1.opacity-100.mt-1
+                p.text
+                    |D. Streamer didn't like your message and you got bapped.
+                p.text.text-e
+                    |(Just because you don't like a game doesn't mean you need to let the streamer know)
+            div.border-box.pb-1.pt-1.opacity-100.mt-1
+                p.text
+                    |E. Self promotion or linking another low viewer count streamer that has no affiliation to Chance.
+                p.text.text-e
+                    |(No one wants to see your shitty valorant gameplay)
+            div.border-box.pb-1.pt-1.opacity-100.mb-3.mt-1
+                p.text
+                    |F. You were banned for being a toxic sperg/racist in another channel
+                p.text.text-e
+                    |(Just because the streamer is watching another channel doesn't mean you should go spam that chat)
+        div.mt-3.border-box.pb-1.pt-1.opacity-100
+            p.text
+                |If by chance you find yourself rebanned after being unbanned by ban appeal, or another mod, you may be on the banlist which auto rebans if you type (You may get a whisper from Fossabot confirming this)  in which case just whisper Alice_mayami or VulpesHD
+        div.mt-3.border-box.pb-1.pt-1.opacity-100
+            p.text
+                |WARNING: If you were banned previously within the past 6 months for racism you will not be unbanned, and if you were banned for doxxing your ban will not be lifted, doxxing is not tolerated in any form. (The act of doxxing is taking information about a streamer or person, such as names, addresses or phone numbers, and posting it in chat in an attempt to stream snipe or worst case scenario SWAT)
+        div.mt-3.border-box.pb-1.pt-1.opacity-100
+            p.text
+                |We are thoroughly checking every application and will delete every appeal containing words that are racist or against TOS.
+        div
+            a.btn.btn-md.btn-outline-success(href='/unban/form' type='button') Twitch unban
+            a.btn.btn-md.btn-outline-success.ms-3(href='/unban/form' type='button') Discord unban

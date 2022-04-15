@@ -4,12 +4,18 @@ const { body, validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 const helpers = require('../public/js/helpers.js');
 const ObjectId = require('mongodb').ObjectId;
+const config = require('../config/config');
+const isModFormDisabled = config.isModFormDisabled;
+
+var Recaptcha = require('express-recaptcha').RecaptchaV2;
+var recaptcha = new Recaptcha(config.SITE_KEY, config.SECRET_KEY);
 
 // bring in models
 let ModApplication = require('../models/modApplication');
 
-router.get('/apply', (req, res) => {
-    res.render('mod_apply');
+router.get('/apply', recaptcha.middleware.render, (req, res) => {
+    if (isModFormDisabled) {res.render('/');}
+    res.render('mod_apply', { captcha: res.recaptcha });
 });
 
 // mod applications default view
@@ -18,46 +24,53 @@ router.get('/view/:resolution', helpers.checkAuthentication, (req, res) => {
         if(err) { console.log(err) }
         if (Object.keys(modApplications).length < 1) {
             res.render('mod', {
-                empty: true
+                empty: true,
+                resolution: req.params.resolution
             })
         }
         else {
             res.render('mod', {
-                modApplications: modApplications
+                modApplications: modApplications,
+                resolution: req.params.resolution
             });  
         }
     });
 });
 
 router.post('/apply',
+    recaptcha.middleware.verify,
     body('discordTag', 'Discord tag is required').notEmpty().escape(),
     body('textContent', 'Tell us why').notEmpty().escape(),
     body('howLong', 'Please specify how long have you been in the discord').notEmpty().escape(),
     body('experience', 'Fill in experience field').notEmpty().escape(),
     body('improvement', 'Tell us about improvements you can make').notEmpty().escape(),
     async (req, res) => {
+        if (req.recaptcha.error) {
+            req.flash('error', 'Captcha error');
+            return res.redirect('/');
+        }
+        if (isModFormDisabled) {res.status(500).send();}
         let errors = validationResult(req);
         if (Object.keys(errors.errors).length > 0) {
             res.render('mod_apply', {
                 errors: errors.errors
-            });} 
-            else { 
-                let modApplication = new ModApplication();
-                modApplication.discordTag = req.body.discordTag;
-                modApplication.textContent = req.body.textContent;
-                modApplication.howLong = req.body.howLong;
-                modApplication.experience = req.body.experience;
-                modApplication.improvement = req.body.improvement;
-                modApplication.save( (err) => {
-                if (err) {
-                    console.log(err);
-                    return;
-                } else {
-                    req.flash('success', 'Mod application sent!')
-                    res.redirect('/');
-                    }
-                });   
-        }  
+            });
+        } else { 
+            let modApplication = new ModApplication();
+            modApplication.discordTag = req.body.discordTag;
+            modApplication.textContent = req.body.textContent;
+            modApplication.howLong = req.body.howLong;
+            modApplication.experience = req.body.experience;
+            modApplication.improvement = req.body.improvement;
+            modApplication.save( (err) => {
+            if (err) {
+                console.log(err);
+                return;
+            } else {
+                req.flash('success', 'Mod application sent!');
+                res.redirect('/'); }
+            });
+        }     
     }
 );
 
@@ -65,22 +78,20 @@ router.post('/apply',
 router.put('/update/:id',
     async (req, res) => {
         if (!req.user._id) {
-            res.status(500).send();
-        } else {
-            let errors = validationResult(req);
-            if (Object.keys(errors.errors).length > 0) {
-                res.render('mod/applicaion/:id', {
-                    errors: errors.errors
-                });}
-                else {
-                    ModApplication.findOneAndUpdate(
-                        { _id: req.params.id },
-                        { $set: { "resolution" : req.body.resolution }},
-                        (err) => {
-                    if (err) {console.log(err)}
-                })
-            }
+            return res.status(500).send();
         }
+        let errors = validationResult(req);
+        if (Object.keys(errors.errors).length > 0) {
+            return res.render('mod/applicaion/:id', {
+                errors: errors.errors
+            });}
+            ModApplication.findOneAndUpdate(
+                { _id: req.params.id },
+                { $set: { "resolution" : req.body.resolution }},
+                (err) => {
+            if (err) {console.log(err)}
+            res.status(200).send();
+        })
     }   
 );
 
@@ -103,4 +114,5 @@ router.get(`/application/:id`, helpers.checkAuthentication, async (req, res) => 
         res.redirect('/');
     }  
 })
+
 module.exports = router;
