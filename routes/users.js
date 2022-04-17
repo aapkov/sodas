@@ -22,7 +22,6 @@ router.post('/register',
     body('email', 'Email is required').notEmpty(),
     body('email', 'Email is not valid').isEmail(),
     body('password', 'Password is required, 5 - 18 characters').notEmpty().isLength({min:5, max: 18}),
-
     (req, res) => {
         const username = req.body.username;
         const email = req.body.email;
@@ -30,35 +29,27 @@ router.post('/register',
 
         let errors = validationResult(req);
         if (Object.keys(errors.errors).length > 0) {
-            res.render('register', {
+            return res.render('register', {
                 errors:errors.errors,
                 user: req.user
             });
-        } else {
-            let newUser = new User ({
-                username: username,
-                email: email,
-                password: password
-            });
-            bcrypt.genSalt(10, (error, salt) => {
-                bcrypt.hash(newUser.password, salt, (error, hash) =>{
-                    if(error) {
-                        console.log(error)
-                    }
-                    newUser.password = hash;
-                    newUser.save((error) => {
-                        if(error) {
-                            console.log(error);
-                            return;
-                        } else {
-                            req.flash('success', 'Registered');
-                            res.redirect('/users/login');
-                        }
-                    })
-                });
-            })
-
         }
+        let newUser = new User ({
+            username: username,
+            email: email,
+            password: password
+        });
+        bcrypt.genSalt(10, (error, salt) => {
+            bcrypt.hash(newUser.password, salt, (error, hash) =>{
+                if(error) { return console.log(error) }
+                newUser.password = hash;
+                newUser.save((error) => {
+                    if(error) { return console.log(error); }
+                    req.flash('success', 'Registered');
+                    res.redirect('/users/login');
+                })
+            });
+        })      
 });
 
 // login form

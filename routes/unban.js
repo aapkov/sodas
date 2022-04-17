@@ -43,6 +43,7 @@ router.post('/form',
     body('banReason', 'Fill all the fields').notEmpty().isLength({min:5, max: 1000}),
     body('unbanReason', 'Fill all the fields').notEmpty().isLength({min:5, max: 1000}),
     async (req, res) => {
+        if (!req.user._id) { return res.status(500).send(); }
         if (req.recaptcha.error) {
             req.flash('error', 'Captcha error');
             return res.redirect('/form');
@@ -85,9 +86,7 @@ router.post('/form',
 
 router.put('/update/:id',
     async (req, res) => {
-        if (!req.user._id) {
-            return res.status(500).send();
-        }
+        if (!req.user._id) { return res.status(500).send(); }
         let errors = validationResult(req);
         if (Object.keys(errors.errors).length > 0) {
             return res.render('unban/applicaion/:id', {
@@ -104,6 +103,7 @@ router.put('/update/:id',
 );
 
 router.get(`/application/:id`, helpers.checkAuthentication, async (req, res) => {
+    if (!req.user._id) { return res.status(500).send(); }
     let unbanRequest = await UnbanRequest.findById(req.params.id).exec();
     if (Object.keys(unbanRequest).length > 0) {
        res.render('single_unban_request', {
