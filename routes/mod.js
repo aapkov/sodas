@@ -88,7 +88,7 @@ router.put('/update/:id',
         }
         let errors = validationResult(req);
         if (Object.keys(errors.errors).length > 0) {
-            return res.render('mod/applicaion/:id', {
+            return res.redirect('mod/applicaion/:id', {
                 errors: errors.errors
             });}
             ModApplication.findOneAndUpdate(

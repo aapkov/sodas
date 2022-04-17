@@ -23,7 +23,7 @@ router.get(`/add`, helpers.checkAuthentication, (req, res) => {
 // add color
 router.post('/add',
     body('name', 'Name is required').notEmpty(),
-    body('name', 'Name can contain only 2 - 18 letters').isAlpha().isLength({min:2, max: 18}),
+    body('name', 'Name can contain only 2 - 18 letters').isLength({min:2, max: 18}),
     body('hex', 'Hex is required').notEmpty(),
     body('hex', 'Must be a valid hex value').isHexColor().isAlphanumeric(),
     async (req, res) => {

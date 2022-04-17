@@ -40,10 +40,9 @@ router.post('/form',
     body('userName', 'Username is required').notEmpty().isLength({min:2, max: 25}),
     body('isJustified', 'Fill all the fields').notEmpty(),
     body('howLongAgo', 'Fill all the fields').notEmpty(),
-    body('banReason', 'Fill all the fields').notEmpty().isLength({min:5, max: 1000}),
-    body('unbanReason', 'Fill all the fields').notEmpty().isLength({min:5, max: 1000}),
+    body('banReason', 'Fill all the fields').notEmpty().isLength({min:1, max: 1000}),
+    body('unbanReason', 'Fill all the fields').notEmpty().isLength({min:1, max: 1000}),
     async (req, res) => {
-        if (!req.user._id) { return res.status(500).send(); }
         if (req.recaptcha.error) {
             req.flash('error', 'Captcha error');
             return res.redirect('/form');
@@ -51,7 +50,7 @@ router.post('/form',
 
         let errors = validationResult(req);
         if (Object.keys(errors.errors).length > 0) {
-            return res.redirect('/form', {
+            return res.render('unban_request', {
                 errors:errors.errors,
             });
         }
