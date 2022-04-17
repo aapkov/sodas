@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const { body, validationResult } = require('express-validator');
 const flash = require('connect-flash');
 const app = express();
+const config = require('./config/config');
 const passport = require('passport');
 const port = process.env.PORT;
 
@@ -15,7 +16,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 // Express session
 app.use(session({
-    secret: 'rigs gay',
+    secret: config.SECRET,
     resave: true,
     saveUninitialized: true
   }));
