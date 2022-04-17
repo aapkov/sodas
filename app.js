@@ -39,6 +39,7 @@ mongoose.connect(process.env.DATABASE, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
+
 let db = mongoose.connection;
 db.once('open', () => {
     console.log('connected to mongoDB');

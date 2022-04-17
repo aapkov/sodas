@@ -5,7 +5,7 @@ block content
     form(method='POST', action='/mod/apply')
         div.form-container
             div.form-field
-                textarea.textContainer.transparent-input.form-control.form-control-md.mt-2.w-50(name='discordTag', type='text', placeholder='Discord Tag', id='discordTag')
+                input.transparent-input.form-control.form-control-md.mt-2.w-50(name='discordTag', type='text', placeholder='Discord Tag', id='discordTag')
             div.form-field
                 textarea.textContainer.transparent-input.form-control.form-control-md.mt-2.w-50(name='textContent', type='text', placeholder='Tell us why you want to be mod and what you’d bring to the community', id='textContent')
             div.form-field
@@ -17,4 +17,4 @@ block content
             div.form-field
                 p !{captcha}
             div.text-center
-                input.btn.btn-outline-success.mt-2(type='submit', value='Submit')
+                input.btn.btn-outline-success.mt-2(type='Submit', value='Submit')

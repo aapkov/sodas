@@ -23,17 +23,15 @@ router.get('/view/:resolution', helpers.checkAuthentication, (req, res) => {
     ModApplication.find({resolution: req.params.resolution}, (err, modApplications) => {
         if(err) { console.log(err) }
         if (Object.keys(modApplications).length < 1) {
-            res.render('mod', {
+            return res.render('mod', {
                 empty: true,
                 resolution: req.params.resolution
-            })
+            });
         }
-        else {
-            res.render('mod', {
-                modApplications: modApplications,
-                resolution: req.params.resolution
-            });  
-        }
+        res.render('mod', {
+            modApplications: modApplications,
+            resolution: req.params.resolution
+        });
     });
 });
 
@@ -47,30 +45,38 @@ router.post('/apply',
     async (req, res) => {
         if (req.recaptcha.error) {
             req.flash('error', 'Captcha error');
-            return res.redirect('/');
+            return res.redirect('/mod/apply');
         }
-        if (isModFormDisabled) {res.status(500).send();}
+        if (isModFormDisabled) { return res.status(500).send(); }
         let errors = validationResult(req);
         if (Object.keys(errors.errors).length > 0) {
-            res.render('mod_apply', {
+            return res.render('mod_apply', {
                 errors: errors.errors
             });
-        } else { 
-            let modApplication = new ModApplication();
-            modApplication.discordTag = req.body.discordTag;
-            modApplication.textContent = req.body.textContent;
-            modApplication.howLong = req.body.howLong;
-            modApplication.experience = req.body.experience;
-            modApplication.improvement = req.body.improvement;
-            modApplication.save( (err) => {
-            if (err) {
-                console.log(err);
-                return;
-            } else {
-                req.flash('success', 'Mod application sent!');
-                res.redirect('/'); }
-            });
-        }     
+        }
+        let queryDb = await ModApplication.find({
+            discordTag: req.body.discordTag
+        });
+
+        if (!Object.keys(queryDb).length <= 0) {
+            req.flash('error', 'Request for that user already exists');
+            res.redirect('/');
+            return;
+        }
+
+        let modApplication = new ModApplication({
+            discordTag: req.body.discordTag,
+            textContent: req.body.textContent,
+            howLong: req.body.howLong,
+            experience: req.body.experience,
+            improvement: req.body.improvement,
+        });
+        
+        modApplication.save( (err) => {
+        if (err) { return console.log(err); }
+        req.flash('success', 'Mod application sent!');
+        res.redirect('/'); 
+        });      
     }
 );
 

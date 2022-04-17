@@ -1,0 +1,21 @@
+extends layout
+
+block content
+    d.header
+        p Ban Appeals
+    div.filter-section.d-flex.justify-content-center.mt-3.mb-3
+        div.p2
+            a.btn.btn-sm.btn-outline-warning(href='/unban/view/u', data-toggle="button") Unresolved
+        div.p2.ms-3
+            a.btn.btn-sm.btn-outline-danger(href='/unban/view/d', data-toggle="button") Denied
+        div.p2.ms-3
+            a.btn.btn-sm.btn-outline-success(href='/unban/view/a', data-toggle="button") Accepted
+    .container#dataDisplay(class="border-"+resolution)
+            if empty
+                div.empty-message.p-2 Nothing to display
+            else
+                each unbanApplication, i in unbanApplications
+                    div.color-row
+                        div.d-flex.align-items-center.ms-3.text-question #{unbanApplication.userName}
+                        div.p-2.edit-buttons
+                            a.btn.btn-sm.btn-outline-warning(href='/unban/application/' + unbanApplication._id, data-id=unbanApplication._id) Open

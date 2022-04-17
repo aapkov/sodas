@@ -4,6 +4,10 @@ const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const passport = require ('passport');
 const helpers = require('../public/js/helpers.js');
+const config = require('../config/config');
+
+var Recaptcha = require('express-recaptcha').RecaptchaV2;
+var recaptcha = new Recaptcha(config.SITE_KEY, config.SECRET_KEY);
 
 // bring in user model
 let User = require('../models/user');
@@ -58,11 +62,15 @@ router.post('/register',
 });
 
 // login form
-router.get('/login', (req, res) => {
-    res.render('login');
+router.get('/login', recaptcha.middleware.render, (req, res) => {
+    res.render('login', { captcha: res.recaptcha });
 });
 
-router.post('/login', (req, res, next) => {
+router.post('/login', recaptcha.middleware.verify, (req, res, next) => {
+    if (req.recaptcha.error) {
+        req.flash('error', 'Captcha error');
+        return res.redirect('/users/login');
+    }
     passport.authenticate('local', {
         successRedirect: '/',
         failureRedirect: '/users/login',

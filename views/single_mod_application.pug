@@ -21,7 +21,7 @@ block content
                     p.text #{improvement}
         div
             if resolution == 'u'
-                a.btn.btn-sm.btn-outline-success.mod-action(data-id=_id value='a') Accept
-                a.btn.btn-sm.btn-outline-danger.mod-action.ms-2(data-id=_id value='d') Deny
+                a.btn.btn-sm.btn-outline-success.mod-action(data-id=_id value='a' mod-action='/mod') Accept
+                a.btn.btn-sm.btn-outline-danger.mod-action.ms-2(data-id=_id value='d' mod-action='/mod') Deny
             if resolution == 'd'
-                a.btn.btn-sm.btn-outline-danger.mod-action(data-id=_id value='u') un-Deny
+                a.btn.btn-sm.btn-outline-danger.mod-action(data-id=_id value='u' mod-action='/mod') un-Deny

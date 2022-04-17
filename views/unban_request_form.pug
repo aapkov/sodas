@@ -1,22 +1,43 @@
 extends layout
 
 block content
-    h1.text-center Unban Request
+    if isDiscord === 'true'
+        h1.text-center Discord Unban Request
+    else
+        h1.text-center Twitch Unban Request
+    form(method='POST', action='/unban/form')
         div.border-box.form-container
-            div.form-check.form-check-inline
-                input.form-check-input(type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1")
-                label.form-check-label Discord ban
-            div.form-check.form-check-inline
-                input.form-check-input(type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2")
-                label.form-check-label Twitch ban
-            div.form-field
-                input.transparent-input.form-control.form-control-md.mt-2.w-50(name='name', type='text', placeholder='Name')
-            div.form-field
-                input.transparent-input.form-control.form-control-md.mt-2.w-50(name='name', type='text', placeholder='Name')
-            div.form-field
-                input.transparent-input.form-control.form-control-md.mt-2.w-50(name='name', type='text', placeholder='Name')
-            div.form-field
-                input.transparent-input.form-control.form-control-md.mt-2.w-50(name='name', type='text', placeholder='Name')
-        div
-            if resolution == 'u'
-                a.btn.btn-sm.btn-outline-success(type='submit', value='Submit') Submit
+            div
+                input.transparent-input.d-none(name="isDiscord" id="inlineRadio1" value=isDiscord)
+            if isDiscord === 'true'
+                div.form-field.mt-3
+                    input.transparent-input.form-control.form-control-md.mt-2.w-50(name='userName', type='text', placeholder='Your Discord tag')
+            else
+                div.form-field.mt-3
+                    input.transparent-input.form-control.form-control-md.mt-2.w-50(name='userName', type='text', placeholder='Your Twitch username')
+                div.form-field
+            div.form-field.mt-2
+                p.mt-2.text-question
+                    |When were you banned?
+                select.form-select.transparent-input.form-control.form-control-md.mt-2.w-50(name='howLongAgo')
+                    option(value='1') Less than 6 months ago
+                    option(value='2') Around 6 months ago
+                    option(value='3') 1 year ago
+                    option(value='4') 2 years ago
+                    option(value='5') Over 3 years ago
+            div.form-field.mt-3
+                p.mt-2.text-question
+                    |Do you think your suspension was justified?
+                select.form-select.transparent-input.form-control.form-control-md.mt-2.w-50(name='isJustified')
+                    option(value='1') Yes
+                    option(value='2') No
+            div.form-field.mt-3
+                textarea.textContainer.transparent-input.form-control.form-control-md.mt-2.input-medium(name='banReason', type='text', placeholder='Why did you get banned?')
+            div.form-field.mt-3
+                textarea.textContainer.transparent-input.form-control.form-control-md.mt-2.input-medium(name='unbanReason', type='text', placeholder='Why do you think you should get unbanned?')
+            div.form-field.mt-3.mb-4
+                textarea.textContainer.transparent-input.form-control.form-control-md.mt-2.input-medium(name='notes', type='text', placeholder='Anything else you want to add?')
+        div.form-field
+            p !{captcha}
+        div.d-flex.justify-content-center
+            input.btn.btn-sm.btn-outline-success.mt-1(type='Submit', value='Submit')

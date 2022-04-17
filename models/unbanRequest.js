@@ -6,17 +6,34 @@ let unbanRequestSchema = mongoose.Schema({
         type: Boolean,
         required: true
     },
-    isJustified: {
-        type: Boolean,
+    userName: {
+        type: String,
         required: true
     },
-    textContent:{
+    isJustified: {
+        type: Number,
+        required: true
+    },
+    banReason:{
+        type: String,
+        required: true
+    },
+    unbanReason:{
         type: String,
         required: true
     },
     howLongAgo:{
-        type: String,
+        type: Number,
         required: true
+    },
+    notes: {
+        type: String,
+        required: false
+    },
+    resolution:{
+        type: String,
+        required: true,
+        default: 'u'
     }
 })
 

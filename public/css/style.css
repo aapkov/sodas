@@ -18,6 +18,12 @@ h1 {
     opacity: .5;
     border:1px solid rgb(0, 0, 0);
 }
+.transparent-input::placeholder {
+    text-align:center;
+}
+.input-medium {
+    width: 90%;
+}
 
 .header {
     margin-bottom: 10px;

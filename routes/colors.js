@@ -27,57 +27,46 @@ router.post('/add',
     body('hex', 'Hex is required').notEmpty(),
     body('hex', 'Must be a valid hex value').isHexColor().isAlphanumeric(),
     async (req, res) => {
-    if (!req.user._id) {
-        res.status(500).send(); } 
-        else {
-        let errors = validationResult(req);
-        if (Object.keys(errors.errors).length > 0) {
-            res.render('add_color', {
-                title: 'Add color',
-                user: req.user,
-                errors: errors.errors
-            });} else  {
-            // integration with discord bot
-            let channel = client.channels.cache.get(process.env.TEST_CHANNEL_ID);
-
-            // create the role,. get id, and update color object with it
-            if (await doesColorExist(req.body.name)) {
-                res.render('add_color', {
-                    title: 'Add color',
-                    errors: [{'msg': 'Role with that name already exists'}]
-            });} else {
-                let color = new Color();
-                color.name = req.body.name;
-                color.hex = req.body.hex;
-                color.author = req.user._id;
-
-                let colorID = await addColor(channel, color.name, color.hex);
-                color.id = colorID;
-                color.save( (err) => {
-                if (err) {
-                    console.log(err);
-                    return;
-                } else {
-                    req.flash('success', 'Color added')
-                    res.redirect('/');
-                    }
-                });   
-            } 
-        }
+    if (!req.user._id) { return res.status(500).send(); }
+    let errors = validationResult(req);
+    if (Object.keys(errors.errors).length > 0) {
+        return res.render('add_color', {
+            title: 'Add color',
+            user: req.user,
+            errors: errors.errors
+        });
     }
+
+    // integration with discord bot
+    let channel = client.channels.cache.get(process.env.TEST_CHANNEL_ID);
+
+    // create the role,. get id, and update color object with it
+    if (await doesColorExist(req.body.name)) {
+        return res.render('add_color', {
+            title: 'Add color',
+            errors: [{'msg': 'Role with that name already exists'}] });}
+    let color = new Color();
+    color.name = req.body.name;
+    color.hex = req.body.hex;
+    color.author = req.user._id;
+
+    let colorID = await addColor(channel, color.name, color.hex);
+    color.id = colorID;
+    color.save( (err) => {
+    if (err) { return console.log(err); }
+    req.flash('success', 'Color added');
+    res.redirect('/');
+    });
 });
 
 // deleting colors
 router.delete('/:id', async (req, res) => {
-    if (!req.user._id) {
-        res.status(500).send();
-    } else {
-        let channel = client.channels.cache.get(process.env.TEST_CHANNEL_ID);
-        await deleteColor(channel, req.params.id);
-        req.flash('success', 'Color Deleted')
-        res.status(200).send(); 
-    }
-})
+    if (!req.user._id) { return res.status(500).send(); }
+    let channel = client.channels.cache.get(process.env.TEST_CHANNEL_ID);
+    await deleteColor(channel, req.params.id);
+    req.flash('success', 'Color Deleted');
+    res.status(200).send();
+});
 
 // discord functions
 async function doesColorExist(roleName) {
@@ -86,6 +75,7 @@ async function doesColorExist(roleName) {
     });
     if (Object.keys(result).length > 0) { return true }
 }
+
 async function addColor(channel, colorName, colorHex) {
     try {
         let role = await channel.guild.roles.create({
@@ -96,6 +86,7 @@ async function addColor(channel, colorName, colorHex) {
     return role.id;
     } catch (error) { console.log(error); } 
 }
+
 async function deleteColor(channel, color_id) {
     let color = await Color.findById(color_id);
     if (color) { 
@@ -107,4 +98,5 @@ async function deleteColor(channel, color_id) {
         console.log('Could not find color with id:' + color_id);
     }
 }
+
 module.exports = router;

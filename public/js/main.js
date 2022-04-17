@@ -17,15 +17,16 @@ $(document).ready( () => {
       $target = $(e.target);
       const id = $target.attr('data-id');
       let resolution = $target.attr('value');
-      let data = {resolution: resolution}
+      let modAction = $target.attr('mod-action');
+      let data = { resolution: resolution }
       $.ajax(
         {
-          url: '/mod/update/' +id,
+          url: `${modAction}/update/` +id,
           type: 'PUT',
           contentType: "application/json",
           data: JSON.stringify(data),
           success: function(response) {
-            window.location.href= `/mod/view/${resolution}`;
+            window.location.href= `${modAction}/view/${resolution}`;
           }, error: function(err) {
             console.log(err); }
       })
@@ -62,14 +63,22 @@ $(document).ready( () => {
           }
         });
     });
+
     $(function() {
       var pathName = window.location.pathname;
-      if (pathName.includes('/mod/view/u')) {
-        $( "a[href='/mod/view/u']" ).addClass('active');
-      } else if (pathName.includes('/mod/view/d')) {
-        $( "a[href='/mod/view/d']" ).addClass('active');
-      } else if (pathName.includes('/mod/view/a')) {
-        $( "a[href='/mod/view/a']" ).addClass('active');
+      if (pathName.includes('view/u')) {
+        $( "a[href*='view/u']" ).addClass('active');
+      } else if (pathName.includes('view/d')) {
+        $( "a[href*='view/d']" ).addClass('active');
+      } else if (pathName.includes('view/a')) {
+        $( "a[href*='view/a']" ).addClass('active');
       }
-    });   
+    }); 
+
+    $('.unban-button').on('click', (e) => {
+      $target = $(e.target);
+      let isDiscord = $target.attr('isDiscord');
+      window.location.href= '/unban/form?' + `isDiscord=${isDiscord}`;
+    });
+
 })
