@@ -191,6 +191,16 @@ h1 {
     border-radius: 6px;
 }
 
+.fa-brands {
+    margin-left: 10px;
+}
+.fa-discord {
+    color: #7289d9;
+}
+.fa-twitch {
+    color: #6441a5;
+}
+
 #footer {
     font-size: small;
     color: black;

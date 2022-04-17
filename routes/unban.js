@@ -37,7 +37,7 @@ router.get('/view/:resolution', helpers.checkAuthentication, (req, res) => {
 
 router.post('/form',
     recaptcha.middleware.verify,
-    body('userName', 'Username is required').notEmpty().isLength({min:2, max: 25}),
+    body('userName', 'Username is required').notEmpty().isLength({min:2, max: 32}),
     body('isJustified', 'Fill all the fields').notEmpty(),
     body('howLongAgo', 'Fill all the fields').notEmpty(),
     body('banReason', 'Fill all the fields').notEmpty().isLength({min:1, max: 1000}),

@@ -17,5 +17,10 @@ block content
                 each unbanApplication, i in unbanApplications
                     div.color-row
                         div.d-flex.align-items-center.ms-3.text-question #{unbanApplication.userName}
+                            case unbanApplication.isDiscord
+                                    when true
+                                        i.fa-brands.fa-discord
+                                    when false
+                                        i.fa-brands.fa-twitch
                         div.p-2.edit-buttons
                             a.btn.btn-sm.btn-outline-warning(href='/unban/application/' + unbanApplication._id, data-id=unbanApplication._id) Open
