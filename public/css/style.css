@@ -20,6 +20,7 @@ h1 {
 }
 .transparent-input::placeholder {
     text-align:center;
+    color:white;
 }
 .input-medium {
     width: 90%;

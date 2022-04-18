@@ -38,10 +38,10 @@ router.get('/view/:resolution', helpers.checkAuthentication, (req, res) => {
 router.post('/apply',
     recaptcha.middleware.verify,
     body('discordTag', 'Discord tag is required').notEmpty().escape().isLength({min:2, max: 32}),
-    body('textContent', 'Tell us why').notEmpty().escape(),
-    body('howLong', 'Please specify how long have you been in the discord').notEmpty().escape(),
-    body('experience', 'Fill in experience field').notEmpty().escape(),
-    body('improvement', 'Tell us about improvements you can make').notEmpty().escape(),
+    body('textContent', 'Tell us why').notEmpty(),
+    body('howLong', 'Please specify how long have you been in the discord').notEmpty(),
+    body('experience', 'Fill in experience field').notEmpty(),
+    body('improvement', 'Tell us about improvements you can make').notEmpty(),
     async (req, res) => {
         if (req.recaptcha.error) {
             req.flash('error', 'Captcha error');
