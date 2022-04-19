@@ -13,6 +13,18 @@ const UserSchema = mongoose.Schema({
     password:{
         type: String,
         required: true
+    },
+    isDiscord:{
+        type: Boolean,
+        required: false
+    },
+    isTwitch:{
+        type: Boolean,
+        required: false
+    },
+    isAdmin: {
+        type: Boolean,
+        required: false
     }
 })
 

@@ -1,22 +1,22 @@
 extends layout
 
 block content
-    h1.text-center Ban appeal by<br />#{userName}
-        div#border(class="border-"+resolution value=resolution).pb-3.mt-3
-            if isDiscord === 'true'
+    h1.text-center Ban appeal by<br />#{unbanRequest.userName}
+        div#border(class="border-"+unbanRequest.resolution value=unbanRequest.resolution).mt-3
+            if unbanRequest.isDiscord === 'true'
                 div.mt-3.mb-0
                     p.text-question Discord tag
                     div.border-box.mt-1
-                        p.text #{userName}
+                        p.text #{unbanRequest.userName}
             else
                 div.mt-3.mb-0
                     p.text-question Twitch name
                     div.border-box.mt-1
-                        p.text #{userName}
+                        p.text #{unbanRequest.userName}
             div.mt-3.mb-0
                 p.text-question When were you banned?
                 div.border-box.mt-1
-                    case howLongAgo
+                    case unbanRequest.howLongAgo
                         when 1
                             p.text Less than 6 months ago
                         when 2
@@ -30,7 +30,7 @@ block content
             div.mt-3.mb-0
                 p.text-question Do you think your suspension was justified?
                 div.border-box.mt-1
-                    case isJustified
+                    case unbanRequest.isJustified
                         when 1
                             p.text Yes
                         when 2
@@ -38,18 +38,24 @@ block content
             div.mt-3.mb-0
                 p.text-question Why did you get banned?
                 div.border-box.mt-1
-                    p.text #{banReason}
+                    p.text #{unbanRequest.banReason}
             div.mt-3.mb-0
                 p.text-question Why do you think you should get unbanned?
                 div.border-box.mt-1
-                    p.text #{unbanReason}
-            div.mt-3.mb-0
+                    p.text #{unbanRequest.unbanReason}
+            div.mt-3.mb-2
                 p.text-question Anything else you want to add?
                 div.border-box.mt-1
-                    p.text #{notes}
+                    p.text #{unbanRequest.notes}
+        div.d-flex.align-items-end.flex-row.mt-1(style={width: '90%'})
+            i.fa-solid-interactive.fa-solid.fa-thumbs-up.text-success.d-flex.align-items-center.mt-auto.ms-auto(value='upvotes' data-id=_id)
+                p.mb-0.font-weight-light.ms-1 #{unbanRequest.upvotes.length}
+            i.fa-solid.fa-solid-interactive.fa-thumbs-down.text-danger.d-flex.align-items-center.mt-auto.ms-2(value='downvotes' data-id=_id)
+                p.mb-0.font-weight-light.ms-1 #{unbanRequest.downvotes.length}
         div
-            if resolution == 'u'
+            if unbanRequest.resolution == 'u'
                 a.btn.btn-sm.btn-outline-success.mod-action(data-id=_id value='a' mod-action='/unban') Accept
                 a.btn.btn-sm.btn-outline-danger.mod-action.ms-2(data-id=_id value='d' mod-action='/unban') Deny
-            if resolution == 'd'
+            if unbanRequest.resolution == 'd'
                 a.btn.btn-sm.btn-outline-danger.mod-action(data-id=_id value='u' mod-action='/unban') un-Deny
+    script(src='/js/unbans.js')

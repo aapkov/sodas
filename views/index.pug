@@ -9,7 +9,7 @@ block content
                     d.second-record(style={background: '#' + color.hex}) 
                     div.first-record #{color.name}
                     div.third-record.edit-buttons(style={color: '#' + color.hex}) hex: ##{color.hex}
-                    if user
+                    if user.isDiscord || user.isAdmin
                         d.edit-buttons
                             d.p-2
                                 a.btn.btn-sm.btn-outline-danger.delete-color(data-id=color._id) Delete

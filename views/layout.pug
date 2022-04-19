@@ -6,6 +6,7 @@ html
         link(rel='stylesheet' href='/css/style.css')
         script(src="https://kit.fontawesome.com/37ac22a12a.js" crossorigin="anonymous")
         script(src='https://www.google.com/recaptcha/api.js')
+        script(src='/bower_components/jquery/dist/jquery.js')
     body
         nav.navbar.navbar-expand.navbar-dark.bg-dark.mb-2
             .container
@@ -15,11 +16,12 @@ html
                     li.nav-item.mt-2
                             a.nav-link(href='/') Colors
                     if user
-                        li.nav-item.mt-2
-                            a.nav-link(href='/colors/add') Add Colors
-                    else
-                        li.nav-item.mt-2
-                            a.nav-link(href='/mod/apply') Apply for Mod
+                        if user.isDiscord || user.isAdmin
+                            li.nav-item.mt-2
+                                a.nav-link(href='/colors/add') Add Colors
+                    if !user
+                        //- li.nav-item.mt-2
+                        //-     a.nav-link(href='/mod/apply') Apply for Mod
                         li.nav-item.mt-2
                             a.nav-link(href='/unban') Request Unban
                 ul.nav.navbar-nav.nav-right
@@ -28,8 +30,9 @@ html
                             a.nav-link(href='/unban/view/u') Ban Appeals
                         li.nav-item
                             a.nav-link(href='/mod/view/u') Mod Applications
-                        li.nav-item
-                            a.nav-link(href='/users/register') Register
+                        if user.isAdmin
+                            li.nav-item
+                                a.nav-link(href='/users/register') Register
                         li.nav-item
                             a.nav-link(href='/users/logout') Logout
                     else
@@ -45,6 +48,5 @@ html
             hr
             footer#footer.navbar.fixed-bottom
                 p Made with <span> &#10084; </span> by apeK
-        script(src='/bower_components/jquery/dist/jquery.js')
         script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
         script(src='/js/main.js')

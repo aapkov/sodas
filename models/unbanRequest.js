@@ -34,7 +34,10 @@ let unbanRequestSchema = mongoose.Schema({
         type: String,
         required: true,
         default: 'u'
-    }
+    },
+    comments: [{ userName: String, Text: String, date: Date }],
+    upvotes: [String],
+    downvotes: [String]
 })
 
 let UnbanRequest = module.exports = mongoose.model('UnbanRequest', unbanRequestSchema);

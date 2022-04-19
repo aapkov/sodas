@@ -10,5 +10,12 @@ block content
                 input.transparent-input.form-control.form-control-md.mt-2.w-50(name='email', type='text', placeholder='Email')
             div.form-field
                 input.transparent-input.form-control.form-control-md.mt-2.w-50(name='password', type='password', placeholder='Password')
+            div.form-field.mt-2
+                p.mt-2.text-question
+                    |User type
+                select.form-select.transparent-input.form-control.form-control-md.mt-2.w-50(name='userType')
+                    option(value='1') Discord Mod
+                    option(value='2') Twitch Mod
+                    option(value='3') Twitch & Discord Mod
             div.text-center
                 input.btn.btn-outline-success.mt-2(type='submit', value='Submit')

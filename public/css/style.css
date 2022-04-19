@@ -135,16 +135,18 @@ h1 {
     border: 1px solid rgb(25, 135, 84) !important;
     border-radius: 6px;
 }
-
+.fa-solid {
+    font-weight: 400 !important;
+    font-size: small;
+}
+.fa-solid-interactive:hover {
+    font-weight: 600 !important;
+}
 .color-row {
     display: flex;
     flex-direction: row;
     margin-top: 2px;
     margin-bottom: 2px;
-}
-
-.edit-buttons {
-    margin-left: auto;
 }
 
 .first-record {

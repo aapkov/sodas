@@ -22,5 +22,10 @@ block content
                                         i.fa-brands.fa-discord
                                     when false
                                         i.fa-brands.fa-twitch
+                        div.d-flex.align-items-end.flex-row.mb-2
+                            i.fa-solid.fa-thumbs-up.text-success.d-flex.align-items-center.mt-auto
+                                p.mb-0.font-weight-light.ms-1 #{unbanApplication.upvotes.length}
+                            i.fa-solid.fa-thumbs-down.text-danger.d-flex.align-items-center.mt-auto.ms-2
+                                p.mb-0.font-weight-light.ms-1 #{unbanApplication.downvotes.length}
                         div.p-2.edit-buttons
                             a.btn.btn-sm.btn-outline-warning(href='/unban/application/' + unbanApplication._id, data-id=unbanApplication._id) Open

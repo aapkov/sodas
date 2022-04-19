@@ -1,8 +1,7 @@
 const express = require('express')
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
-const mongoose = require('mongoose');
-const helpers = require('../public/js/helpers.js');
+const { limitUserAccess, checkAuthentication } = require('../public/js/helpers.js');
 
 // discord bot stuff
 const { Client, Intents } = require('discord.js');
@@ -14,7 +13,8 @@ let Color = require('../models/color');
 let User = require('../models/user');
 
 // Post Routing
-router.get(`/add`, helpers.checkAuthentication, (req, res) => {
+router.get(`/add`, checkAuthentication, (req, res) => {
+    limitUserAccess(req, res, 'discord');
     res.render('add_color', {
         title: 'Add color'
     });
@@ -27,7 +27,7 @@ router.post('/add',
     body('hex', 'Hex is required').notEmpty(),
     body('hex', 'Must be a valid hex value').isHexColor().isAlphanumeric(),
     async (req, res) => {
-    if (!req.user._id) { return res.status(500).send(); }
+    limitUserAccess(req, res, 'discord');
     let errors = validationResult(req);
     if (Object.keys(errors.errors).length > 0) {
         return res.render('add_color', {
@@ -61,7 +61,7 @@ router.post('/add',
 
 // deleting colors
 router.delete('/:id', async (req, res) => {
-    if (!req.user._id) { return res.status(500).send(); }
+    limitUserAccess(req, res, 'discord');
     let channel = client.channels.cache.get(process.env.TEST_CHANNEL_ID);
     await deleteColor(channel, req.params.id);
     req.flash('success', 'Color Deleted');
