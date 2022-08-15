@@ -54,8 +54,10 @@ block content
                 p.mb-0.font-weight-light.ms-1 #{unbanRequest.downvotes.length}
         div
             if unbanRequest.resolution == 'u'
-                a.btn.btn-sm.btn-outline-success.mod-action(data-id=_id value='a' mod-action='/unban') Accept
+                a.btn.btn-sm.btn-outline-success.mod-action.button-message(data-id=_id value='a' mod-action='/unban') Accept
                 a.btn.btn-sm.btn-outline-danger.mod-action.ms-2(data-id=_id value='d' mod-action='/unban') Deny
             if unbanRequest.resolution == 'd'
                 a.btn.btn-sm.btn-outline-danger.mod-action(data-id=_id value='u' mod-action='/unban') un-Deny
+            div.hide
+                p WARNING: Accepting will notify the user via email!
     script(src='/js/unbans.js')

@@ -4,6 +4,7 @@ const { body, validationResult } = require('express-validator');
 const helpers = require('../public/js/helpers.js');
 const config = require('../config/config');
 const { checkAuthentication } = require('../public/js/helpers.js');
+const sendUnbanEmail = require('../src/sendUnbanEmail');
 
 var Recaptcha = require('express-recaptcha').RecaptchaV2;
 var recaptcha = new Recaptcha(config.SITE_KEY, config.SECRET_KEY);
@@ -44,6 +45,7 @@ router.get('/view/:resolution', checkAuthentication, (req, res) => {
 
 router.post('/form',
     recaptcha.middleware.verify,
+    body('email', 'Valid email is required').notEmpty().isEmail(),
     body('userName', 'Username is required').notEmpty().isLength({min:2, max: 32}),
     body('isJustified', 'Fill all the fields').notEmpty(),
     body('howLongAgo', 'Fill all the fields').notEmpty(),
@@ -80,6 +82,7 @@ router.post('/form',
             banReason: req.body.banReason,
             unbanReason: req.body.unbanReason,
             notes: req.body.notes,
+            email: req.body.email,
             upvotes: [],
             downvotes: [],
             resolution: 'u'
@@ -107,6 +110,9 @@ router.put('/update/:id',
 
         let query = {};
         if (req.body.resolution) {
+            if (req.body.resolution == "a" && unbanRequest.email) {
+                sendUnbanEmail(unbanRequest.email);
+            }
             query = { $set: { "resolution" : req.body.resolution }};
         } else if (req.body.value === 'upvotes') {
             if (unbanRequestUpvotes.indexOf(req.user._id) > -1) {
@@ -117,14 +123,10 @@ router.put('/update/:id',
                 return res.status(409).send();
             } else { query = { $push: { "downvotes" : req.user._id }};}
         } else {
-            console.log('else sssdggsd')
             return res.status(500).send();
         }
 
-        UnbanRequest.findOneAndUpdate(
-            { _id: req.params.id },
-            query,
-            (err) => {
+        UnbanRequest.findOneAndUpdate( { _id: req.params.id }, query, (err) => {
         if (err) {console.log(err)}
         res.status(200).send();
         });

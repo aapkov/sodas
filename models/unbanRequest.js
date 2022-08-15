@@ -35,6 +35,10 @@ let unbanRequestSchema = mongoose.Schema({
         required: true,
         default: 'u'
     },
+    email: {
+        type: String,
+        required: false
+    },
     comments: [{ userName: String, Text: String, date: Date }],
     upvotes: [String],
     downvotes: [String]

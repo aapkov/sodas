@@ -3,7 +3,6 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const passport = require ('passport');
-const helpers = require('../public/js/helpers.js');
 const config = require('../config/config');
 const { limitUserAccess, checkAuthentication } = require('../public/js/helpers.js');
 
@@ -12,6 +11,8 @@ var recaptcha = new Recaptcha(config.SITE_KEY, config.SECRET_KEY);
 
 // bring in user model
 let User = require('../models/user');
+const generatePassword = require('../src/generatePassword');
+const sendPasswordEmail = require('../src/sendPasswordEmail');
 
 // register
 router.get('/register', checkAuthentication, (req, res) => {
@@ -23,14 +24,13 @@ router.post('/register',
     body('username', 'Username is required, only letters allowed, 3 - 18 characters').notEmpty().isAlpha().isLength({min:3, max: 18}),
     body('email', 'Email is required').notEmpty(),
     body('email', 'Email is not valid').isEmail(),
-    body('password', 'Password is required, 5 - 18 characters').notEmpty().isLength({min:5, max: 18}),
     (req, res) => {
         limitUserAccess(req, res, 'twitch');
         const username = req.body.username;
         const email = req.body.email;
-        const password = req.body.password;
         let isDiscord = false;
         let isTwitch = false;
+        const password = generatePassword();
 
         // Assign user permissions
         switch (req.body.userType) {
@@ -69,9 +69,11 @@ router.post('/register',
         bcrypt.genSalt(10, (error, salt) => {
             bcrypt.hash(newUser.password, salt, (error, hash) =>{
                 if(error) { return console.log(error) }
+                unhashedPassword = newUser.password;
                 newUser.password = hash;
                 newUser.save((error) => {
                     if(error) { return console.log(error); }
+                    sendPasswordEmail(newUser.username, unhashedPassword, newUser.email);
                     req.flash('success', 'Registered');
                     res.redirect('/');
                 })

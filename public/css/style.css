@@ -220,3 +220,11 @@ h1 {
 #footer span {
     color: crimson;
 }
+.hide {
+    display: none;
+    font-size: small;
+}
+.button-message:hover ~ .hide {
+    display: block;
+    color: red;
+  }
