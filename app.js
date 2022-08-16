@@ -4,15 +4,33 @@ const express = require('express');
 const session = require('express-session');
 const path = require('path');
 const bodyParser = require('body-parser');
-const { body, validationResult } = require('express-validator');
-const flash = require('connect-flash');
 const app = express();
 const config = require('./config/config');
 const passport = require('passport');
+const cron = require('node-cron');
 const port = process.env.PORT;
+
+// Bring in discord bot
+const { Client, Intents } = require('discord.js');
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+client.login(process.env.BOT_TOKEN);
+
+// bring in models
+let UnbanRequest = require('./models/unbanRequest');
 
 // Set Public Folder
 app.use(express.static(path.join(__dirname, '/public')));
+
+// Task scheduler
+cron.schedule('* */12 * * *', () => {
+    let channel = client.channels.cache.get(process.env.REMINDERS_CHANNEL_ID);
+    UnbanRequest.find({
+        resolution: "u"
+    }).then((result) => {
+        if (!result.length <= 0) {
+            channel.send(`Pending unban request/s awaiting approval: ${result.length}\n https://skippybot.me/unban/view/u`) }
+    });
+});
 
 // Express session
 app.use(session({

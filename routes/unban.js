@@ -9,7 +9,7 @@ const sendUnbanEmail = require('../src/sendUnbanEmail');
 var Recaptcha = require('express-recaptcha').RecaptchaV2;
 var recaptcha = new Recaptcha(config.SITE_KEY, config.SECRET_KEY);
 
-// bring in user model
+// bring in models
 let UnbanRequest = require('../models/unbanRequest');
 
 // main page
@@ -21,24 +21,24 @@ router.get('/form', recaptcha.middleware.render, (req, res) => {
     res.render('unban_request_form', { isDiscord: req.query.isDiscord, captcha: res.recaptcha });
 });
 
-router.get('/view/:resolution', checkAuthentication, (req, res) => {
+router.get('/view/:resolution/:currentPage', checkAuthentication, async (req, res) => {
     let query = {};
     if (req.user.isAdmin || (req.user.isDiscord && req.user.isTwitch)) {
         query = { resolution: req.params.resolution }} 
     else {
         query = { resolution: req.params.resolution, isDiscord: req.user.isDiscord }}
 
-    UnbanRequest.find(query, (err, unbanApplications) => {
-        if(err) { console.log(err) }
-        if (Object.keys(unbanApplications).length < 1) {
-            return res.render('unban', {
-                empty: true,
-                resolution: req.params.resolution
-            });
-        }
-        res.render('unban', {
-            unbanApplications: unbanApplications,
-            resolution: req.params.resolution
+    let recordsPerPage = 20;
+    
+    UnbanRequest
+    .find(query)
+    .skip((req.params.currentPage - 1) * recordsPerPage)
+    .limit(recordsPerPage)
+    .exec(function(err, results) {
+       return res.render('unban', {
+        unbanApplications: results,
+        resolution: req.params.resolution,
+        currentPage: req.params.currentPage
         });
     });
 });
