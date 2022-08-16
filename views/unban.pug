@@ -29,3 +29,27 @@ block content
                                 p.mb-0.font-weight-light.ms-1 #{unbanApplication.downvotes.length}
                         div.p-2.edit-buttons
                             a.btn.btn-sm.btn-outline-warning(href='/unban/application/' + unbanApplication._id, data-id=unbanApplication._id) Open
+    nav.mt-3
+        ul.pagination.justify-content-center
+            if previousButtonEnabled
+                li.page-item
+                    a.page-link(href=`/unban/view/${resolution}/${currentPage - 1}` aria-label="Previous")
+                        span(aria-hidden="true") &laquo;
+                        span.sr-only Previous
+            else
+                li.page-item.disabled
+                    a.page-link(href="#" aria-label="Previous")
+                        span(aria-hidden="true") &laquo;
+                        span.sr-only Previous
+            li.page-item
+                a.page-link.disabled #{currentPage}
+            if nextButtonEnabled
+                li.page-item
+                    a.page-link(href=`/unban/view/${resolution}/${currentPage + 1}` aria-label="Next")
+                        span(aria-hidden="true") &raquo;
+                        span.sr-only Next
+            else
+                li.page-item.disabled
+                    a.page-link.disabled(href="#" aria-label="Next")
+                        span(aria-hidden="true") &raquo;
+                        span.sr-only Next

@@ -5,6 +5,7 @@ const helpers = require('../public/js/helpers.js');
 const config = require('../config/config');
 const { checkAuthentication } = require('../public/js/helpers.js');
 const sendUnbanEmail = require('../src/sendUnbanEmail');
+const getUnbanApplications = require('../src/getUnbanApplications.js');
 
 var Recaptcha = require('express-recaptcha').RecaptchaV2;
 var recaptcha = new Recaptcha(config.SITE_KEY, config.SECRET_KEY);
@@ -25,21 +26,16 @@ router.get('/view/:resolution/:currentPage', checkAuthentication, async (req, re
     let query = {};
     if (req.user.isAdmin || (req.user.isDiscord && req.user.isTwitch)) {
         query = { resolution: req.params.resolution }} 
-    else {
-        query = { resolution: req.params.resolution, isDiscord: req.user.isDiscord }}
+    else { query = { resolution: req.params.resolution, isDiscord: req.user.isDiscord }}
 
-    let recordsPerPage = 20;
+    let unbanApplications = await getUnbanApplications(req, query);
     
-    UnbanRequest
-    .find(query)
-    .skip((req.params.currentPage - 1) * recordsPerPage)
-    .limit(recordsPerPage)
-    .exec(function(err, results) {
-       return res.render('unban', {
-        unbanApplications: results,
+    return res.render('unban', {
+        unbanApplications: unbanApplications.applications,
+        previousButtonEnabled: unbanApplications.previousButtonEnabled,
+        nextButtonEnabled: unbanApplications.nextButtonEnabled,
         resolution: req.params.resolution,
-        currentPage: req.params.currentPage
-        });
+        currentPage: parseInt(req.params.currentPage)
     });
 });
 
