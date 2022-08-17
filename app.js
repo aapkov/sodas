@@ -28,7 +28,7 @@ cron.schedule('* */12 * * *', () => {
         resolution: "u"
     }).then((result) => {
         if (!result.length <= 0) {
-            channel.send(`Pending unban request/s awaiting approval: ${result.length}\n https://skippybot.me/unban/view/u`) }
+            channel.send(`Pending unban request/s awaiting approval: ${result.length}\n https://skippybot.me/unban/view/u/1`) }
     });
 });
 

@@ -26,7 +26,7 @@ $(document).ready( () => {
           contentType: "application/json",
           data: JSON.stringify(data),
           success: function(response) {
-            window.location.href= `${modAction}/view/${resolution}`;
+            window.location.href= `${modAction}/view/${resolution}/1`;
           }, error: function(err) {
             console.log(err); }
       })
