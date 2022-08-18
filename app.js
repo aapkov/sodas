@@ -22,7 +22,7 @@ let UnbanRequest = require('./models/unbanRequest');
 app.use(express.static(path.join(__dirname, '/public')));
 
 // Task scheduler
-cron.schedule('* */12 * * *', () => {
+cron.schedule('0 */12 * * *', () => {
     let channel = client.channels.cache.get(process.env.REMINDERS_CHANNEL_ID);
     UnbanRequest.find({
         resolution: "u"

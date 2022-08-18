@@ -227,4 +227,9 @@ h1 {
 .button-message:hover ~ .hide {
     display: block;
     color: red;
-  }
+}
+.user-logs {
+    font-size: xx-small;
+    color: yellow;
+    display: block;
+}

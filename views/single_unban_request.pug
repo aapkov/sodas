@@ -1,8 +1,8 @@
 extends layout
 
 block content
-    h1.text-center Ban appeal by<br />#{unbanRequest.userName}
-        div#border(class="border-"+unbanRequest.resolution value=unbanRequest.resolution).mt-3
+    h1.text-center.mb-2 Ban appeal by:<br />#{unbanRequest.userName}
+        div#border(class="border-"+unbanRequest.resolution value=unbanRequest.resolution)
             if unbanRequest.isDiscord === 'true'
                 div.mt-3.mb-0
                     p.text-question Discord tag
@@ -11,6 +11,7 @@ block content
             else
                 div.mt-3.mb-0
                     p.text-question Twitch name
+                    a.user-logs.mb-1(href=`https://www.twitch.tv/popout/sodapoppin/viewercard/${unbanRequest.userName}` target='_blank') User Logs
                     div.border-box.mt-1
                         p.text #{unbanRequest.userName}
             div.mt-3.mb-0
