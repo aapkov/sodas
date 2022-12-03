@@ -54,6 +54,12 @@ axios.post("https://id.twitch.tv/oauth2/token" +
             axios.post("https://skippybot.me/announcer/createWebhook?eventType=" + eventTypes[i])
                 .then(() => {
                     console.log("Webhook successfully established");
+                    axios.get('"https://api.twitch.tv/helix/eventsub/subscriptions', {
+                        headers: {
+                        'Client-Id': proxess.env.TWITCH_CLIENT_ID,
+                        'Authorization': 'Bearer ' + acces_token
+                        }
+                        }).then((res) => {console.log(res)})
                 })
                 .catch(webhookError => {
                     console.log("Webhook creation error: " + webhookError);
