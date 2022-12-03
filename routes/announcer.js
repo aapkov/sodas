@@ -57,7 +57,7 @@ axios.post("https://id.twitch.tv/oauth2/token" +
                     axios.get('"https://api.twitch.tv/helix/eventsub/subscriptions', {
                         headers: {
                         'Client-Id': process.env.TWITCH_CLIENT_ID,
-                        'Authorization': 'Bearer ' + acces_token
+                        'Authorization': 'Bearer ' + access_token
                         }
                         }).then((res) => {console.log(res)})
                 })
@@ -105,7 +105,7 @@ const twitchWebhookEventHandler = (webhookEvent) => {
 //     axios.get('"https://api.twitch.tv/helix/eventsub/subscriptions', {
 //         headers: {
 //             'Client-Id': proxess.env.TWITCH_CLIENT_ID,
-//             'Authorization': 'Bearer ' + acces_token
+//             'Authorization': 'Bearer ' + access_token
 //         }
 //     }).then(response => {
 //         if (response.status === 200) {
@@ -115,7 +115,7 @@ const twitchWebhookEventHandler = (webhookEvent) => {
 //                 {
 //                     headers: {
 //                         'Client-Id': proxess.env.TWITCH_CLIENT_ID,
-//                         'Authorization': 'Bearer ' + acces_token
+//                         'Authorization': 'Bearer ' + access_token
 //                     }
 //                 })
 //                 .then(() => {
