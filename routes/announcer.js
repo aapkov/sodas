@@ -66,8 +66,6 @@ function clearSubscriptions () {
     });
 }
 
-clearSubscriptions();
-
 axios.post("https://id.twitch.tv/oauth2/token" +
     "?client_id=" + process.env.TWITCH_CLIENT_ID +
     "&client_secret=" + process.env.TWITCH_CLIENT_SECRET +
@@ -86,7 +84,8 @@ axios.post("https://id.twitch.tv/oauth2/token" +
         const responseData = response.data;
         access_token = responseData.access_token;
 
-        for (let i = 0; i < eventTypes.length; i++) {
+        clearSubscriptions().then(() => {
+            for (let i = 0; i < eventTypes.length; i++) {
             axios.post("https://skippybot.me/announcer/createWebhook?eventType=" + eventTypes[i])
                 .then(() => {
                     console.log("Webhook successfully established");
@@ -94,7 +93,8 @@ axios.post("https://id.twitch.tv/oauth2/token" +
                 .catch(webhookError => {
                     console.log("Webhook creation error: " + webhookError);
                 });
-        }
+            }
+        });
     })
     .catch(error => {
         console.log(error);
