@@ -218,11 +218,10 @@ router.post('/createWebhook', (request, response) => {
 // DISCORD MESSAGE
 async function sendAnnouncementMessage() {
     console.log("im where i want to be");
-	let announcer = await Announcer.find({}, async (err) => {
+	Announcer.find({id: '1'},  function (err, announcer) {
         if(err) { console.log(err) }
-    });
-    console.log("announcer " + announcer);
-	if (Object.keys(announcer).length > 0) {
+        console.log("announcer " + announcer);
+        if (Object.keys(announcer).length > 0) {
         if (announcer.isEnabled == 'true') {
             let channel = client.channels.cache.get(process.env.CHANNEL_ANNOUNCEMENTS_ID);
             channel.send(announcer.content);
@@ -230,6 +229,7 @@ async function sendAnnouncementMessage() {
 	} else {
 		console.log("did not announce cause announcements are off");
 	}
+});	
 }
 
 router.get(`/`,
