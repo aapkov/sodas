@@ -48,18 +48,11 @@ axios.post("https://id.twitch.tv/oauth2/token" +
     .then(response => {
         const responseData = response.data;
         access_token = responseData.access_token;
-        console.log(access_token)
 
         for (let i = 0; i < eventTypes.length; i++) {
             axios.post("https://skippybot.me/announcer/createWebhook?eventType=" + eventTypes[i])
                 .then(() => {
                     console.log("Webhook successfully established");
-                    axios.get('"https://api.twitch.tv/helix/eventsub/subscriptions', {
-                        headers: {
-                        'Client-Id': process.env.TWITCH_CLIENT_ID,
-                        'Authorization': 'Bearer ' + access_token
-                        }
-                        }).then((res) => {console.log(res)})
                 })
                 .catch(webhookError => {
                     console.log("Webhook creation error: " + webhookError);
@@ -94,6 +87,13 @@ const verifyTwitchWebhookSignature = (request, response, buffer, encoding) => {
 }
 
 router.use(express.json({ verify: verifyTwitchWebhookSignature }));
+
+axios.get('"https://api.twitch.tv/helix/eventsub/subscriptions', {
+                        headers: {
+                        'Client-Id': process.env.TWITCH_CLIENT_ID,
+                        'Authorization': 'Bearer ' + access_token
+                        }
+                        }).then((res) => {console.log(JSON.parse(res))})
 
 //handle verified the events
 const twitchWebhookEventHandler = (webhookEvent) => {
@@ -158,7 +158,7 @@ router.post('/webhooks/callback', async (reqest, response) => {
 })
 
 router.post('/createWebhook', (request, response) => {
-    console.log("in createWebhook" + request);
+    console.log("in createWebhook" + JSON.stringify(request));
     let createWebhookParameters = {
         host: "api.twitch.tv",
         path: "helix/eventsub/subscriptions",
@@ -185,6 +185,8 @@ router.post('/createWebhook', (request, response) => {
 
     let responseData = "";
     let webhookRequest = https.request(createWebhookParameters, (result) => {
+        console.log('statusCode:', result.statusCode);
+        console.log('headers:', result.headers);
         result.setEncoding('utf8');
         result.on('data', function (data) {
             responseData = responseData + data;
