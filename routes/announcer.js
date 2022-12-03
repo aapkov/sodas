@@ -13,6 +13,8 @@ const { limitUserAccess, checkAuthentication } = require('../public/js/helpers.j
 // Bring in discord bot
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const streamAnnouncementCooldown = 300000;
+var lastStreamDate = 0;
 client.login(process.env.BOT_TOKEN);
 
 //Connect to mongoDB
@@ -32,7 +34,7 @@ const eventTypes =
 let access_token = ''; // needs to be generated every time
 
 function clearSubscriptions () {
-    axios.get('"https://api.twitch.tv/helix/eventsub/subscriptions', {
+    axios.get('https://api.twitch.tv/helix/eventsub/subscriptions', {
         headers: {
             'Client-Id': process.env.TWITCH_CLIENT_ID,
             'Authorization': 'Bearer ' + access_token
@@ -207,9 +209,10 @@ async function sendAnnouncementMessage(event) {
 	let announcer = await Announcer.find({}, async (err) => {
         if(err) { console.log(err) }
     });
+    console.log("announcer " + announcer);
 	if (Object.keys(announcer).length > 0) {
         if (announcer.isEnabled == 'true') {
-            let channel = client.channels.cache.get(CHANNEL_ANNOUNCEMENTS_ID); 
+            let channel = client.channels.cache.get(process.env.CHANNEL_ANNOUNCEMENTS_ID);
 		let stream = await twitch.helix.streams.getStreamByUserId(event.broadcaster_user_id);
 		let startDate = stream.startDate;
 		let startDateParsed = Date.parse(startDate);
