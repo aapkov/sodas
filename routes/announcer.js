@@ -83,18 +83,48 @@ axios.post("https://id.twitch.tv/oauth2/token" +
     .then(response => {
         const responseData = response.data;
         access_token = responseData.access_token;
-
-        clearSubscriptions().then(() => {
-            for (let i = 0; i < eventTypes.length; i++) {
-            axios.post("https://skippybot.me/announcer/createWebhook?eventType=" + eventTypes[i])
-                .then(() => {
-                    console.log("Webhook successfully established");
+        
+        axios.get('https://api.twitch.tv/helix/eventsub/subscriptions', {
+        headers: {
+            'Client-Id': process.env.TWITCH_CLIENT_ID,
+            'Authorization': 'Bearer ' + access_token
+        }
+        }).then(response => {
+        if (response.status === 200) {
+            const subscribedEvents = response.data;
+            for (let i = 0; i < subscribedEvents.data.length; i++) {
+                axios.delete("https://api.twitch.tv/helix/eventsub/subscriptions?id=" + subscribedEvents.data[i].id,
+                {
+                    headers: {
+                        'Client-Id': process.env.TWITCH_CLIENT_ID,
+                        'Authorization': 'Bearer ' + access_token
+                    }
                 })
-                .catch(webhookError => {
-                    console.log("Webhook creation error: " + webhookError);
+                .then(() => {
+                    console.log('unsubscribed from an event  ' + subscribedEvents.data[i].type);
+                    if (subscribedEvents.data.length == i) {
+                        for (let i = 0; i < eventTypes.length; i++) {
+                            axios.post("https://skippybot.me/announcer/createWebhook?eventType=" + eventTypes[i])
+                                .then(() => {
+                                    console.log("Webhook successfully established");
+                                })
+                                .catch(webhookError => {
+                                    console.log("Webhook creation error: " + webhookError);
+                                });
+                        }
+                    }
+                })
+                .catch(webhokError => {
+                    console.log(webhokError);
                 });
             }
-        });
+        } else {
+            console.log(response.status, response.data);
+        }
+    })
+    .catch(err => {
+        console.log(err);
+    });
     })
     .catch(error => {
         console.log(error);
