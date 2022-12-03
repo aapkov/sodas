@@ -66,6 +66,8 @@ function clearSubscriptions () {
     });
 }
 
+clearSubscriptions();
+
 axios.post("https://id.twitch.tv/oauth2/token" +
     "?client_id=" + process.env.TWITCH_CLIENT_ID +
     "&client_secret=" + process.env.TWITCH_CLIENT_SECRET +
@@ -83,7 +85,6 @@ axios.post("https://id.twitch.tv/oauth2/token" +
     .then(response => {
         const responseData = response.data;
         access_token = responseData.access_token;
-        clearSubscriptions();
 
         for (let i = 0; i < eventTypes.length; i++) {
             axios.post("https://skippybot.me/announcer/createWebhook?eventType=" + eventTypes[i])
