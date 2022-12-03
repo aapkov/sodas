@@ -102,13 +102,19 @@ app.get('/icon', (req, res) => {
 
 // Bring in routes
 let colorRoutes = require('./routes/colors');
+app.use('/colors', colorRoutes);
+
 let userRoutes = require('./routes/users');
+app.use('/users', userRoutes);
+
 let modRoutes = require('./routes/mod');
+app.use('/mod', modRoutes);
+
 let unbanRoutes = require('./routes/unban');
 app.use('/unban', unbanRoutes);
-app.use('/users', userRoutes);
-app.use('/colors', colorRoutes);
-app.use('/mod', modRoutes);
+
+let announcerRoutes = require('./routes/announcer');
+app.use('/announcer', announcerRoutes);
 
 // Server Start
 app.listen(port, () =>{

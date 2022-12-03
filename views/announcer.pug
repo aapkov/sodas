@@ -1,0 +1,20 @@
+extends layout
+
+block content
+
+    if isEnabled == 'true'
+        h1.text-center.text-success &#127798 Automatic announcements are ENABLED &#127798
+    else
+        h1.text-center.text-warning &#128528 Automatic announcements are DISABLED &#128528
+    form(method='POST', action='/announcer/update')
+        div.form-container
+            div.form-field
+                input#isEnabled.btn.mt-2(type="button", value-actual=`${isEnabled}`, value="")
+                input#isEnabledActual.d-none(type="hidden", name='isEnabled', value="")
+            div.form-field
+                p#save-warn(display=none) Dont forget to hit Update!
+            div.form-field
+                textarea#announcer-content.textContainer.transparent-input.form-control.form-control-md.mt-2.w-50(name='content', type='text') #{content}
+            div.text-center
+                input.btn.btn-outline-success.mt-2(type='submit', value='Update')
+    script(src='/js/announcer.js')
