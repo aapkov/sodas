@@ -179,7 +179,7 @@ router.post('/createWebhook', (request, response) => {
         "transport": {
             "method": "webhook",
             "callback": "https://skippybot.me/announcer/webhooks/callback",
-            "secret": process.env.TWITCH_SIGNING_SECRET
+            "secret": process.env.TWITCH_SIGNIN_SECRET
         }
     };
 
