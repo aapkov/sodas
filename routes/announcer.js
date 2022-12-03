@@ -5,6 +5,7 @@ const tmi = require('tmi.js');
 const axios = require('axios');
 const fs = require('fs');
 const crypto = require('crypto');
+const https = require('https');
 const { body, validationResult } = require('express-validator');
 const { limitUserAccess, checkAuthentication } = require('../public/js/helpers.js');
 
