@@ -93,7 +93,7 @@ axios.post("https://id.twitch.tv/oauth2/token" +
         if (response.status === 200) {
             const subscribedEvents = response.data;
 
-            if (subscribedEvents.data.length = 0) {
+            if (subscribedEvents.data.length == 0) {
                 for (let i = 0; i < eventTypes.length; i++) {
                     axios.post("https://skippybot.me/announcer/createWebhook?eventType=" + eventTypes[i])
                         .then(() => {
