@@ -217,13 +217,10 @@ router.post('/createWebhook', (request, response) => {
 async function sendAnnouncementMessage() {
 	Announcer.find({id: '1'},  function (err, announcer) {
         if(err) { console.log(err) }
-        console.log(announcer.length);
         if (Object.keys(announcer).length > 0) {
-            console.log(announcer[0].isEnabled);
             if (announcer[0].isEnabled == 'true') {
                 let channel = client.channels.cache.get(process.env.CHANNEL_ANNOUNCEMENTS_ID);
-                console.log(channel);
-                channel.send(announcer[0].content);
+                channel.send(`@everyone ` + announcer[0].content);
             }
 	} else {
 		console.log("did not announce cause announcements are off");
