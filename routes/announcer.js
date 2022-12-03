@@ -13,8 +13,6 @@ const { limitUserAccess, checkAuthentication } = require('../public/js/helpers.j
 // Bring in discord bot
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
-const streamAnnouncementCooldown = 300000;
-var lastStreamDate = 0;
 client.login(process.env.BOT_TOKEN);
 
 //Connect to mongoDB
@@ -217,15 +215,16 @@ router.post('/createWebhook', (request, response) => {
 
 // DISCORD MESSAGE
 async function sendAnnouncementMessage() {
-    console.log("im where i want to be");
 	Announcer.find({id: '1'},  function (err, announcer) {
         if(err) { console.log(err) }
-        console.log("announcer " + announcer);
+        console.log(announcer.length);
         if (Object.keys(announcer).length > 0) {
-        if (announcer.isEnabled == 'true') {
-            let channel = client.channels.cache.get(process.env.CHANNEL_ANNOUNCEMENTS_ID);
-            channel.send(announcer.content);
-        }
+            console.log(announcer.isEnabled);
+            if (announcer.isEnabled == 'true') {
+                let channel = client.channels.cache.get(process.env.CHANNEL_ANNOUNCEMENTS_ID);
+                console.log(channel);
+                channel.send(announcer.content);
+            }
 	} else {
 		console.log("did not announce cause announcements are off");
 	}
