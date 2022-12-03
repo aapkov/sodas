@@ -149,7 +149,8 @@ router.use(express.json({ verify: verifyTwitchWebhookSignature }));
 //                         }).then((res) => {console.log(JSON.parse(res))})
 
 //handle verified the events
-const twitchWebhookEventHandler = (webhookEvent) => {
+async function twitchWebhookEventHandler(webhookEvent)  {
+    console.log("im in twitcheventhandler");
     sendAnnouncementMessage(webhookEvent);
     // console.log(webhookEvent);
 }
