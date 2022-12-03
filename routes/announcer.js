@@ -88,12 +88,12 @@ const verifyTwitchWebhookSignature = (request, response, buffer, encoding) => {
 
 router.use(express.json({ verify: verifyTwitchWebhookSignature }));
 
-axios.get('"https://api.twitch.tv/helix/eventsub/subscriptions', {
-                        headers: {
-                        'Client-Id': process.env.TWITCH_CLIENT_ID,
-                        'Authorization': 'Bearer ' + access_token
-                        }
-                        }).then((res) => {console.log(JSON.parse(res))})
+// axios.get('"https://api.twitch.tv/helix/eventsub/subscriptions', {
+//                         headers: {
+//                         'Client-Id': process.env.TWITCH_CLIENT_ID,
+//                         'Authorization': 'Bearer ' + access_token
+//                         }
+//                         }).then((res) => {console.log(JSON.parse(res))})
 
 //handle verified the events
 const twitchWebhookEventHandler = (webhookEvent) => {
@@ -158,7 +158,7 @@ router.post('/webhooks/callback', async (reqest, response) => {
 })
 
 router.post('/createWebhook', (request, response) => {
-    console.log("in createWebhook" + JSON.stringify(request));
+    console.log("in /createwebhook");
     let createWebhookParameters = {
         host: "api.twitch.tv",
         path: "helix/eventsub/subscriptions",
