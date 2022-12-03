@@ -148,13 +148,6 @@ router.use(express.json({ verify: verifyTwitchWebhookSignature }));
 //                         }
 //                         }).then((res) => {console.log(JSON.parse(res))})
 
-//handle verified the events
-async function twitchWebhookEventHandler(webhookEvent)  {
-    console.log("im in twitcheventhandler");
-    sendAnnouncementMessage(webhookEvent);
-    // console.log(webhookEvent);
-}
-
 router.get('/redirect', (req, res) => {
     res.render('verify_redirect');
 })
@@ -173,7 +166,7 @@ router.post('/webhooks/callback', async (request, response) => {
     console.log("Recieving " +
         eventBody.subscription.type + " request for " +
         eventBody.event.broadcaster_user_name, eventBody);
-    twitchWebhookEventHandler(eventBody);
+    sendAnnouncementMessage();
     response.status(200).end();
 })
 
@@ -223,7 +216,8 @@ router.post('/createWebhook', (request, response) => {
 });
 
 // DISCORD MESSAGE
-async function sendAnnouncementMessage(event) {
+async function sendAnnouncementMessage() {
+    console.log("im where i want to be");
 	let announcer = await Announcer.find({}, async (err) => {
         if(err) { console.log(err) }
     });
@@ -231,18 +225,8 @@ async function sendAnnouncementMessage(event) {
 	if (Object.keys(announcer).length > 0) {
         if (announcer.isEnabled == 'true') {
             let channel = client.channels.cache.get(process.env.CHANNEL_ANNOUNCEMENTS_ID);
-		let stream = await twitch.helix.streams.getStreamByUserId(event.broadcaster_user_id);
-		let startDate = stream.startDate;
-		let startDateParsed = Date.parse(startDate);
-		if (lastStreamDate == 0 || (startDateParsed - lastStreamDate) > streamAnnouncementCooldown ) {
-			lastStreamDate = startDateParsed;
-
-			channel.send(announcer.content);
-		} else { 
-			lastStreamDate = startDateParsed;
-			console.log("did not log another stream start because of cooldown") 
-		    }
-        }	
+            channel.send(announcer.content);
+        }
 	} else {
 		console.log("did not announce cause announcements are off");
 	}
