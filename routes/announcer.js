@@ -138,7 +138,7 @@ router.get('/redirect', (req, res) => {
     res.render('verify_redirect');
 })
 
-router.post('/webhooks/callback', async (reqest, response) => {
+router.post('/webhooks/callback', async (request, response) => {
     console.log("in webhook/callback" + request);
     if (request.header("Twitch-EventSub-Message-Type") === "webhook_callback_verification") {
         console.log("Verifying the Webhook is from Twitch");
@@ -158,7 +158,6 @@ router.post('/webhooks/callback', async (reqest, response) => {
 })
 
 router.post('/createWebhook', (request, response) => {
-    console.log("in /createwebhook");
     let createWebhookParameters = {
         host: "api.twitch.tv",
         path: "helix/eventsub/subscriptions",
