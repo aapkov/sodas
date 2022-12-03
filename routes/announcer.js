@@ -56,7 +56,7 @@ axios.post("https://id.twitch.tv/oauth2/token" +
                     console.log("Webhook successfully established");
                     axios.get('"https://api.twitch.tv/helix/eventsub/subscriptions', {
                         headers: {
-                        'Client-Id': proxess.env.TWITCH_CLIENT_ID,
+                        'Client-Id': process.env.TWITCH_CLIENT_ID,
                         'Authorization': 'Bearer ' + acces_token
                         }
                         }).then((res) => {console.log(res)})
