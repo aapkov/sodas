@@ -46,7 +46,7 @@ function clearSubscriptions () {
                 axios.delete("https://api.twitch.tv/helix/eventsub/subscriptions?id=" + subscribedEvents.data[i].id,
                 {
                     headers: {
-                        'Client-Id': proxess.env.TWITCH_CLIENT_ID,
+                        'Client-Id': process.env.TWITCH_CLIENT_ID,
                         'Authorization': 'Bearer ' + access_token
                     }
                 })
