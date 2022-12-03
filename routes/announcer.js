@@ -31,6 +31,39 @@ const eventTypes =
     ];
 let access_token = ''; // needs to be generated every time
 
+function clearSubscriptions () {
+    axios.get('"https://api.twitch.tv/helix/eventsub/subscriptions', {
+        headers: {
+            'Client-Id': process.env.TWITCH_CLIENT_ID,
+            'Authorization': 'Bearer ' + access_token
+        }
+    }).then(response => {
+        if (response.status === 200) {
+            const subscribedEvents = response.data;
+            for (let i = 0; i < subscribedEvents.data.length; i++) {
+                axios.delete("https://api.twitch.tv/helix/eventsub/subscriptions?id=" + subscribedEvents.data[i].id,
+                {
+                    headers: {
+                        'Client-Id': proxess.env.TWITCH_CLIENT_ID,
+                        'Authorization': 'Bearer ' + access_token
+                    }
+                })
+                .then(() => {
+                    console.log('unsubscribed from an event ' + subscribedEvents.data[i].type);
+                })
+                .catch(webhokError => {
+                    console.log(webhokError);
+                });
+            }
+        } else {
+            console.log(response.status, response.data);
+        }
+    })
+    .catch(err => {
+        console.log(err);
+    });
+}
+
 axios.post("https://id.twitch.tv/oauth2/token" +
     "?client_id=" + process.env.TWITCH_CLIENT_ID +
     "&client_secret=" + process.env.TWITCH_CLIENT_SECRET +
@@ -48,6 +81,7 @@ axios.post("https://id.twitch.tv/oauth2/token" +
     .then(response => {
         const responseData = response.data;
         access_token = responseData.access_token;
+        clearSubscriptions();
 
         for (let i = 0; i < eventTypes.length; i++) {
             axios.post("https://skippybot.me/announcer/createWebhook?eventType=" + eventTypes[i])
@@ -97,49 +131,15 @@ router.use(express.json({ verify: verifyTwitchWebhookSignature }));
 
 //handle verified the events
 const twitchWebhookEventHandler = (webhookEvent) => {
-    console.log("WE WIN");
-    console.log(webhookEvent);
+    sendAnnouncementMessage(webhookEvent);
+    // console.log(webhookEvent);
 }
-
-// function chat () {
-//     axios.get('"https://api.twitch.tv/helix/eventsub/subscriptions', {
-//         headers: {
-//             'Client-Id': proxess.env.TWITCH_CLIENT_ID,
-//             'Authorization': 'Bearer ' + access_token
-//         }
-//     }).then(response => {
-//         if (response.status === 200) {
-//             const subscribedEvents = response.data;
-//             for (let i = 0; i < subscribedEvents.data.length; i++) {
-//                 axios.delete("https://api.twitch.tv/helix/eventsub/subscriptions?id=" + subscribedEvents.data[i].id,
-//                 {
-//                     headers: {
-//                         'Client-Id': proxess.env.TWITCH_CLIENT_ID,
-//                         'Authorization': 'Bearer ' + access_token
-//                     }
-//                 })
-//                 .then(() => {
-//                     console.log('unsubscribed from an event ' + subscribedEvents.data[i].type);
-//                 })
-//                 .catch(webhokError => {
-//                     console.log(webhokError);
-//                 });
-//             }
-//         } else {
-//             console.log(response.status, response.data);
-//         }
-//     })
-//     .catch(err => {
-//         console.log(err);
-//     });
-// }
 
 router.get('/redirect', (req, res) => {
     res.render('verify_redirect');
 })
 
 router.post('/webhooks/callback', async (request, response) => {
-    console.log("in webhook/callback" + request);
     if (request.header("Twitch-EventSub-Message-Type") === "webhook_callback_verification") {
         console.log("Verifying the Webhook is from Twitch");
         response.writeHeader(200, {"Content-Type": "text/plain"});
