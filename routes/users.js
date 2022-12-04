@@ -16,18 +16,18 @@ const sendPasswordEmail = require('../src/sendPasswordEmail');
 
 // register
 router.get('/register',
-// checkAuthentication,
+checkAuthentication,
 (req, res) => {
     res.render('register');
 });
 
 router.post('/register',
-    // checkAuthentication,
+    checkAuthentication,
     body('username', 'Username is required, only letters allowed, 3 - 18 characters').notEmpty().isAlpha().isLength({min:3, max: 18}),
     body('email', 'Email is required').notEmpty(),
     body('email', 'Email is not valid').isEmail(),
     (req, res) => {
-        // limitUserAccess(req, res, 'twitch');
+        limitUserAccess(req, res, 'twitch');
         const username = req.body.username;
         const email = req.body.email;
         let isDiscord = false;
