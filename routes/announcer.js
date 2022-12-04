@@ -217,7 +217,7 @@ async function sendAnnouncementMessage() {
         if (Object.keys(announcer).length > 0) {
             if (announcer[0].isEnabled == 'true') {
                 let channel = client.channels.cache.get(process.env.CHANNEL_ANNOUNCEMENTS_ID);
-                channel.send(`@everyone ` + announcer[0].content);
+                channel.send(announcer[0].content);
             }
 	} else {
 		console.log("did not announce cause announcements are off");
