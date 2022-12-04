@@ -4,7 +4,7 @@ const transporter = require('./emails/transporter');
 module.exports = function sendPasswordEmail(username, password, email) {
 
     const mailOptions = {
-        from: config.EMAIL_ADRESS,
+        from: process.env.EMAIL_ADRESS,
         to: email,
         subject: 'Login info for skippybot site',
         text: `Username: ${username}\nPassword: ${password}`

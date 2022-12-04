@@ -25,10 +25,7 @@ mongoose.connect(process.env.DATABASE, {
 let Announcer = require('../models/announcer');
 
 // TWITCH ANNOUNCER START
-const eventTypes =
-    [
-        "stream.online"
-    ];
+const eventTypes = ["stream.online"];
 let access_token = ''; // needs to be generated every time
 
 function clearSubscriptions () {
