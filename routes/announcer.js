@@ -9,6 +9,8 @@ const https = require('https');
 const { body, validationResult } = require('express-validator');
 const { limitUserAccess, checkAuthentication } = require('../public/js/helpers.js');
 
+let lastStreamDate = new Date();
+let streamAnnouncementCooldown = 36000000; // 10 H
 
 // Bring in discord bot
 const { Client, Intents } = require('discord.js');
@@ -212,6 +214,8 @@ router.post('/createWebhook', (request, response) => {
 
 // DISCORD MESSAGE
 async function sendAnnouncementMessage() {
+    let currentStreamTime = new Date();
+    if (currentStreamTime - lastStreamDate < streamAnnouncementCooldown) { return }
 	Announcer.find({id: '1'},  function (err, announcer) {
         if(err) { console.log(err) }
         if (Object.keys(announcer).length > 0) {
