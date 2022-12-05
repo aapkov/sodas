@@ -216,6 +216,7 @@ router.post('/createWebhook', (request, response) => {
 async function sendAnnouncementMessage() {
     let currentStreamTime = new Date();
     if (currentStreamTime - lastStreamDate < streamAnnouncementCooldown) { return }
+    lastStreamDate = currentStreamTime;
 	Announcer.find({id: '1'},  function (err, announcer) {
         if(err) { console.log(err) }
         if (Object.keys(announcer).length > 0) {
